@@ -3,7 +3,7 @@ Node to enable autodiscovery for EasyEsp without have the code on each device
 * Hint use MQTT Explorer to debug what is sent to Home Assistant  
 
 **Controller:**  
-![EasyEsp Controller](Controller.png)
+![EasyEsp Controller](Controller.PNG)
 
 Controller Subscribe:
 homeassistant/%sysname%/#
