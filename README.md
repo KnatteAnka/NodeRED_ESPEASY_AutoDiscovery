@@ -66,6 +66,8 @@ endon
 6. do the same for topic 2 but with /State
 7. Add rules to copy values between them and run task if command is recived
 (Exampel image both Devices)
+![MQTT Import](Dimmer_MQTTImport.PNG)
+![Dummy Device](Dimmer_DummyDevice.PNG)
 ```
 on Import#Percentage do
  taskvalueset,2,1,%eventvalue%
