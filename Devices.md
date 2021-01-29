@@ -31,9 +31,11 @@ endon
 4. Set a name to the same as step 2 and one to State
 5. set 1 Topic to the topic that step2 creates and add /Set
 6. do the same for topic 2 but with /State
-7. Add rules to copy values between them and run task if command is recived
-(Exampel image both Devices)
+7. Add rules to copy values between them and run task if command is recived  
+(Exampel image both Devices)  
+**MQTT Import**  
 ![MQTT Import](Dimmer_MQTTImport.PNG)
+**Dummy Device**  
 ![Dummy Device](Dimmer_DummyDevice.PNG)
 ```
 on Import#Percentage do
