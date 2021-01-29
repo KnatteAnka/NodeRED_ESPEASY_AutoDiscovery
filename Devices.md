@@ -1,8 +1,9 @@
 # NodeRED_ESPEASY_AutoDiscovery  
-[Main Install](MainInstall.md)  
-[Device Install](Devices.md)  
-[Advance Settings](Advance.md)  
 [Start](Readme.md)  
+[Main Install](MainInstall.md)  
+<!--[Start](Readme.md)  --> 
+[Advance Settings](Advance.md)  
+
 
 # Devices:
 
