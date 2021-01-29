@@ -15,8 +15,8 @@
       "qos":"2",
       "datatype":"auto",
       "broker":"18ac67d8.ba0268",
-      "x":150,
-      "y":880,
+      "x":130,
+      "y":720,
       "wires":[
          [
             "e3b57f40.ed83c"
@@ -122,7 +122,7 @@
       "to":"",
       "reg":false,
       "x":460,
-      "y":840,
+      "y":700,
       "wires":[
          [
             "38ffc90b.146236"
@@ -142,8 +142,8 @@
       "targetType":"msg",
       "statusVal":"",
       "statusType":"auto",
-      "x":830,
-      "y":1060,
+      "x":1090,
+      "y":920,
       "wires":[
          
       ]
@@ -158,15 +158,15 @@
       "rules":[
          {
             "t":"eq",
-            "v":"EE/TV_R_11/Stepper/Percent",
-            "vt":"str"
+            "v":"SingelTopic",
+            "vt":"flow"
          }
       ],
       "checkall":"true",
       "repair":false,
       "outputs":1,
       "x":330,
-      "y":1060,
+      "y":920,
       "wires":[
          [
             "1b935601.6f77fa",
@@ -179,17 +179,17 @@
       "type":"function",
       "z":"c7a7e5ea.d0e448",
       "name":"",
-      "func":"var InputPayload = msg.payload.split(\"/\")\n//Check if currect amount of \"/\" if not skipp the package\nvar Debug = flow.get(\"Debug\")\nif (InputPayload.length !=4 ){\n    if(Debug)node.warn(\"Skipping:\"+msg.payload) \n    return  \n} \nInputPayload = [InputPayload]\nInputPayload = {\n    Prefix:InputPayload[0][0],\n    Unit:InputPayload[0][1],\n    TaskName:InputPayload[0][2],\n    Value:InputPayload[0][3]\n}\n\nvar Message =(\"NewValue:\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = false\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nfor (var BB in CurrentList){\n    var Found = 4\n    for (var CC in CurrentList[BB]){\n        if (CurrentList[BB][CC]==InputPayload[CC])Found -= 1\n    }\n    if (Found==0) Found2 = true\n    Message +=\"\\nBB:\"+BB+\" Found:\"+Found+\" Found2:\"+Found2\n    if (Found2)break\n}\n\nif (!Found2&&CheckPrefix!=\"_\"){\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"sensor\"\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.payload//,\n     //unit_of_measurement : \"\",\n     \n    }\n    \n    var NotSensors = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    var Units = [\n        [\"battery\",\"%\"],\n        [\"humidity\",\"%\"],\n        [\"temperature\",\"°C\"],\n        [\"power\",\"W\"],\n        [\"pressure\",\"hPA\"],\n        [\"current\",\"A\"],\n        [\"energy\",\"KWh\"],\n        [\"voltage\",\"V\"]\n        ]\n    //Import settings if variable is declared \n    if (Settings.NotSensors!=undefined){\n        NotSensors = Settings.NotSensors\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n        \n    for (var AA in NotSensors){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+NotSensors[AA][0])\n       if (NotSensors[AA].ValueName!=undefined&&NotSensors[AA].Type!=undefined){\n            var Check = InputPayload.Value.indexOf(NotSensors[AA].ValueName)\n            if (Check>-1){\n                //Found that its declared and the set the type\n                var SetRGB=false\n                if(NotSensors[AA].Brightness!=undefined) MaxLight=NotSensors[AA].Brightness\n                else MaxLight=100\n                if(NotSensors[AA].RGB!=undefined) SetRGB=NotSensors[AA].RGB\n                type=NotSensors[AA].Type\n                \n            }\n       }    \n    }\n    if (type==\"light\"){\n        //node.warn(\"Check Light:\"+InputPayload.TaskName)\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n        //Values.optimistic = true\n        Values.command_topic = BaseTopic+\"/State\"\n        Values.payload_on = 1\n        Values.payload_off = 0\n        Values.brightness_scale = MaxLight\n        Values.brightness_state_topic =BaseTopic\n        Values.brightness_command_topic = BaseTopic+\"/Set\"\n        if (SetRGB){\n            Values.optimistic = true\n            Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n            \n        }\n        \n    }\n    if (type==\"switch\"){\n        Values.state_off = 0\n        Values.state_on = 1\n        Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n        Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n        Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n    }\n    \n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    var Found = false\n    if (type==\"sensor\"){\n        for (var AA in Units){\n            if (Units[AA][0]==Test_type){\n                if (Units[AA][2]!=undefined){\n                    Values.device_class=Units[AA][2]\n                }    \n                Found=true\n                Values.unit_of_measurement=Units[AA][1]\n            }    \n        }\n        if(Debug)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n        if (!Found){\n            if (Settings.UseDefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value\n            }\n            else if (Settings.UseDefaultUnit==true){\n              //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n              Values.unit_of_measurement = InputPayload.Value  \n            } \n        }\n    }\n    Message += \"\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n}\nflow.set(\"List\",CurrentList)\nif(Debug)node.warn(Message)\n",
+      "func":"var InputPayload = msg.payload.split(\"/\")\n//Check if currect amount of \"/\" if not skipp the package\nvar Debug = flow.get(\"Debug\")\nif (InputPayload.length !=4 ){\n    if(Debug)node.warn(\"Skipping:\"+msg.payload) \n    return  \n} \nInputPayload = [InputPayload]\nInputPayload = {\n    Prefix:InputPayload[0][0],\n    Unit:InputPayload[0][1],\n    TaskName:InputPayload[0][2],\n    Value:InputPayload[0][3]\n}\n\nvar Message =(\"NewValue:\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = false\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nfor (var BB in CurrentList){\n    var Found = 4\n    for (var CC in CurrentList[BB]){\n        if (CurrentList[BB][CC]==InputPayload[CC])Found -= 1\n    }\n    if (Found==0) Found2 = true\n    Message +=\"\\nBB:\"+BB+\" Found:\"+Found+\" Found2:\"+Found2\n    if (Found2)break\n}\n\nif (!Found2&&CheckPrefix!=\"_\"){\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"sensor\"\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.payload//,\n     //unit_of_measurement : \"\",\n     \n    }\n    \n    var NotSensors = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    var Units = [\n        {\n            \"ValueName\": \"battery\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"battery\"\n        },\n        {\n            \"ValueName\": \"humidity\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"humidity\"\n        },\n        {\n            \"ValueName\": \"temperature\",\n            \"Unit\": \"°C\",\n            \"Device_Class\": \"temperature\"\n        },\n        {\n            \"ValueName\": \"power\",\n            \"Unit\": \"W\",\n            \"Device_Class\": \"power\"\n        },\n        {\n            \"ValueName\": \"pressure\",\n            \"Unit\": \"hPA\",\n            \"Device_Class\": \"pressure\"\n        },\n        {\n            \"ValueName\": \"current\",\n            \"Unit\": \"A\",\n            \"Device_Class\": \"current\"\n        },\n        {\n            \"ValueName\": \"energy\",\n            \"Unit\": \"KWh\",\n            \"Device_Class\": \"energy\"\n        },\n        {\n            \"ValueName\": \"voltage\",\n            \"Unit\": \"V\",\n            \"Device_Class\": \"voltage\"\n        },\n        {\n            \"ValueName\": \"gm\",\n            \"Unit\": \"GM\"\n        }\n    ]\n    //Import settings if variable is declared \n    if (Settings.NotSensors!=undefined){\n        NotSensors = Settings.NotSensors\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n        \n    for (var AA in NotSensors){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+NotSensors[AA][0])\n       if (NotSensors[AA].ValueName!=undefined&&NotSensors[AA].Type!=undefined){\n            var Check = InputPayload.Value.indexOf(NotSensors[AA].ValueName)\n            if (Check>-1){\n                //Found that its declared and the set the type\n                var SetRGB=false\n                if(NotSensors[AA].Brightness!=undefined) MaxLight=NotSensors[AA].Brightness\n                else MaxLight=100\n                if(NotSensors[AA].RGB!=undefined) SetRGB=NotSensors[AA].RGB\n                type=NotSensors[AA].Type\n                \n            }\n       }    \n    }\n    if (type==\"light\"){\n        //node.warn(\"Check Light:\"+InputPayload.TaskName)\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n        //Values.optimistic = true\n        Values.command_topic = BaseTopic+\"/State\"\n        Values.payload_on = 1\n        Values.payload_off = 0\n        Values.brightness_scale = MaxLight\n        Values.brightness_state_topic =BaseTopic\n        Values.brightness_command_topic = BaseTopic+\"/Set\"\n        if (SetRGB){\n            Values.optimistic = true\n            Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n            \n        }\n        \n    }\n    if (type==\"switch\"){\n        Values.state_off = 0\n        Values.state_on = 1\n        Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n        Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n        Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n    }\n    \n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    var Found = false\n    if (type==\"sensor\"){\n        for (var AA in Units){\n            if (Units[AA].ValueName==Test_type){\n                if (Units[AA].Device_Class!=undefined){\n                    Values.device_class=Units[AA].Device_Class\n                }    \n                Found=true\n                Values.unit_of_measurement=Units[AA].Unit\n            }    \n        }\n        if(Debug)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n        if (!Found){\n            if (Settings.UseDefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value\n            }\n            else if (Settings.UseDefaultUnit==true){\n              //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n              Values.unit_of_measurement = InputPayload.Value  \n            } \n        }\n    }\n    Message += \"\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n}\nflow.set(\"List\",CurrentList)\nif(Debug)node.warn(Message)\n",
       "outputs":1,
       "noerr":0,
       "initialize":"",
       "finalize":"",
       "x":680,
-      "y":900,
+      "y":760,
       "wires":[
          [
             "61dc00b3.b4bf",
-            "7d13c4d8.26b26c"
+            "7a7c9b87.43bac4"
          ]
       ]
    },
@@ -214,7 +214,7 @@
       "topic":"",
       "payload":"true",
       "payloadType":"bool",
-      "x":340,
+      "x":320,
       "y":60,
       "wires":[
          [
@@ -250,10 +250,10 @@
       "id":"a1cb02f6.eb306",
       "type":"comment",
       "z":"c7a7e5ea.d0e448",
-      "name":"Check if new should be added",
+      "name":"Main Flow",
       "info":"",
-      "x":200,
-      "y":820,
+      "x":140,
+      "y":680,
       "wires":[
          
       ]
@@ -279,8 +279,8 @@
       "topic":"",
       "payload":"true",
       "payloadType":"bool",
-      "x":170,
-      "y":520,
+      "x":1270,
+      "y":40,
       "wires":[
          [
             "5f738a1d.0a39f4"
@@ -308,8 +308,8 @@
       "topic":"",
       "payload":"false",
       "payloadType":"bool",
-      "x":170,
-      "y":600,
+      "x":1270,
+      "y":120,
       "wires":[
          [
             "5f738a1d.0a39f4"
@@ -335,8 +335,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":370,
-      "y":560,
+      "x":1470,
+      "y":80,
       "wires":[
          [
             
@@ -367,7 +367,7 @@
       "repair":false,
       "outputs":3,
       "x":190,
-      "y":980,
+      "y":840,
       "wires":[
          [
             "e9b79ec3.be8f9"
@@ -397,8 +397,8 @@
       "topic":"",
       "payload":"Singel",
       "payloadType":"str",
-      "x":170,
-      "y":560,
+      "x":1270,
+      "y":80,
       "wires":[
          [
             "5f738a1d.0a39f4"
@@ -424,8 +424,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":360,
-      "y":680,
+      "x":1460,
+      "y":240,
       "wires":[
          [
             
@@ -453,8 +453,8 @@
       "topic":"",
       "payload":"true",
       "payloadType":"bool",
-      "x":170,
-      "y":680,
+      "x":1270,
+      "y":240,
       "wires":[
          [
             "e1fe0ffe.531ce"
@@ -482,8 +482,8 @@
       "topic":"",
       "payload":"false",
       "payloadType":"bool",
-      "x":170,
-      "y":720,
+      "x":1270,
+      "y":280,
       "wires":[
          [
             "e1fe0ffe.531ce"
@@ -509,10 +509,10 @@
       "once":false,
       "onceDelay":0.1,
       "topic":"homeassistant/sensor/ESP_Fan_Controller_6/Tak_Temp_Temperature/config",
-      "payload":"{\"name\":\"ESP_Fan_Controller_6 Temperature\",\"unique_id\":\"ESP_Fan_Controller_6_Tak_Temp_Temperature\",\"device\":{\"ids\":[\"ESP_Fan_Controller_6\"],\"model\":\"ESPEASY\",\"name\":\"ESP_Fan_Controller_6\"},\"device_class\":\"temperature\",\"state_topic\":\"homeassistant/ESP_Fan_Controller_6/Tak_Temp/Temperature\",\"unit_of_measurement\":\"C\"}",
+      "payload":"{\"name\":\"ESP_Fan_Controller_6 Temperature\",\"unique_id\":\"ESP_Fan_Controller_6_Tak_Temp_Temperature\",\"device\":{\"ids\":[\"ESP_Fan_Controller_6\"],\"model\":\"ESPEASY\",\"name\":\"ESP_Fan_Controller_6\"},\"device_class\":\"temperature\",\"state_topic\":\"EE/ESP_Fan_Controller_6/Tak_Temp/Temperature\",\"unit_of_measurement\":\"C\"}",
       "payloadType":"json",
       "x":820,
-      "y":760,
+      "y":620,
       "wires":[
          [
             "61dc00b3.b4bf",
@@ -530,7 +530,7 @@
       "retain":"true",
       "broker":"18ac67d8.ba0268",
       "x":1070,
-      "y":880,
+      "y":740,
       "wires":[
          
       ]
@@ -557,7 +557,7 @@
       "payload":"{}",
       "payloadType":"json",
       "x":850,
-      "y":800,
+      "y":660,
       "wires":[
          [
             "61dc00b3.b4bf"
@@ -585,37 +585,8 @@
       "topic":"",
       "payload":"ESP_",
       "payloadType":"str",
-      "x":150,
-      "y":240,
-      "wires":[
-         [
-            "80c698db.01a5c8"
-         ]
-      ]
-   },
-   {
-      "id":"abf5e578.e64ad8",
-      "type":"inject",
-      "z":"c7a7e5ea.d0e448",
-      "name":"",
-      "props":[
-         {
-            "p":"payload"
-         },
-         {
-            "p":"topic",
-            "vt":"str"
-         }
-      ],
-      "repeat":"",
-      "crontab":"",
-      "once":false,
-      "onceDelay":0.1,
-      "topic":"",
-      "payload":"",
-      "payloadType":"str",
-      "x":150,
-      "y":280,
+      "x":830,
+      "y":220,
       "wires":[
          [
             "80c698db.01a5c8"
@@ -641,8 +612,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":360,
-      "y":240,
+      "x":1040,
+      "y":220,
       "wires":[
          [
             
@@ -668,8 +639,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":350,
-      "y":460,
+      "x":510,
+      "y":180,
       "wires":[
          [
             
@@ -697,8 +668,8 @@
       "topic":"",
       "payload":"",
       "payloadType":"str",
-      "x":160,
-      "y":460,
+      "x":320,
+      "y":180,
       "wires":[
          [
             "580263.4b1c9d9c"
@@ -717,8 +688,8 @@
       "complete":"false",
       "statusVal":"",
       "statusType":"auto",
-      "x":1090,
-      "y":720,
+      "x":1190,
+      "y":580,
       "wires":[
          
       ]
@@ -737,7 +708,7 @@
       "statusVal":"",
       "statusType":"auto",
       "x":490,
-      "y":1000,
+      "y":860,
       "wires":[
          
       ]
@@ -849,7 +820,7 @@
       "payload":"{\"name\":\"TV_R_11 Stepper Percent\",\"unique_id\":\"TV_R_11_Stepper_Percent\",\"device\":{\"ids\":[\"ESP_TV_R_11\"],\"model\":\"ESPEASY\",\"manufacturer\":\"ESPEASY\",\"name\":\"ESP_TV_R_11\"},\"command_topic\":\"EE/TV_R_11/Stepper/Percent/State\",\"optimistic\":true,\"payload_on\":\"1\",\"payload_off\":\"0\",\"brightness_scale\":100,\"brightness_state_topic\":\"EE/TV_R_11/Stepper/Percent\",\"brightness_command_topic\":\"EE/TV_R_11/Stepper/Percent/Set\"}",
       "payloadType":"json",
       "x":830,
-      "y":660,
+      "y":520,
       "wires":[
          [
             "61dc00b3.b4bf",
@@ -879,7 +850,7 @@
       "payload":"{}",
       "payloadType":"json",
       "x":850,
-      "y":700,
+      "y":560,
       "wires":[
          [
             "61dc00b3.b4bf"
@@ -905,10 +876,10 @@
       "once":true,
       "onceDelay":0.1,
       "topic":"",
-      "payload":"{\"Comment\":\"units is variable and sufix and device_class\",\"Units\":[[\"battery\",\"%\",\"battery\"],[\"humidity\",\"%\",\"humidity\"],[\"temperature\",\"°C\",\"temperature\"],[\"power\",\"W\",\"power\"],[\"pressure\",\"hPA\",\"pressure\"],[\"current\",\"A\",\"current\"],[\"energy\",\"KWh\",\"energy\"],[\"voltage\",\"V\",\"voltage\"],[\"gm\",\"GM\"]],\"NotSensors\":[{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100}],\"UseDefaultUnit\":false}",
+      "payload":"{\"Comment\":\"units is variable and sufix and device_class\",\"Units\":[{\"ValueName\":\"battery\",\"Unit\":\"%\",\"Device_Class\":\"battery\"},{\"ValueName\":\"humidity\",\"Unit\":\"%\",\"Device_Class\":\"humidity\"},{\"ValueName\":\"temperature\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"power\",\"Unit\":\"W\",\"Device_Class\":\"power\"},{\"ValueName\":\"pressure\",\"Unit\":\"hPA\",\"Device_Class\":\"pressure\"},{\"ValueName\":\"current\",\"Unit\":\"A\",\"Device_Class\":\"current\"},{\"ValueName\":\"energy\",\"Unit\":\"KWh\",\"Device_Class\":\"energy\"},{\"ValueName\":\"voltage\",\"Unit\":\"V\",\"Device_Class\":\"voltage\"},{\"ValueName\":\"gm\",\"Unit\":\"GM\"}],\"NotSensors\":[{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100}],\"UseDefaultUnit\":false}",
       "payloadType":"json",
-      "x":600,
-      "y":320,
+      "x":860,
+      "y":260,
       "wires":[
          [
             "eb2e62bc.72124"
@@ -934,8 +905,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":780,
-      "y":320,
+      "x":1040,
+      "y":260,
       "wires":[
          [
             
@@ -963,8 +934,8 @@
       "topic":"",
       "payload":"homeassistant",
       "payloadType":"str",
-      "x":600,
-      "y":260,
+      "x":840,
+      "y":180,
       "wires":[
          [
             "ea36bbf4.a60468"
@@ -990,8 +961,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":800,
-      "y":260,
+      "x":1040,
+      "y":180,
       "wires":[
          [
             
@@ -1034,7 +1005,7 @@
       "repair":false,
       "outputs":5,
       "x":310,
-      "y":940,
+      "y":800,
       "wires":[
          [
             
@@ -1050,33 +1021,6 @@
          ],
          [
             "1b935601.6f77fa"
-         ]
-      ]
-   },
-   {
-      "id":"3e165b0e.0bf044",
-      "type":"change",
-      "z":"c7a7e5ea.d0e448",
-      "name":"",
-      "rules":[
-         {
-            "t":"set",
-            "p":"payload",
-            "pt":"msg",
-            "to":"",
-            "tot":"str"
-         }
-      ],
-      "action":"",
-      "property":"",
-      "from":"",
-      "to":"",
-      "reg":false,
-      "x":520,
-      "y":740,
-      "wires":[
-         [
-            
          ]
       ]
    },
@@ -1102,7 +1046,7 @@
       "payload":"{}",
       "payloadType":"json",
       "x":850,
-      "y":620,
+      "y":480,
       "wires":[
          [
             "61dc00b3.b4bf"
@@ -1131,7 +1075,7 @@
       "payload":"{\"name\":\"NodeRed_1 Time Time\",\"unique_id\":\"NodeRed_1_Time_Time\",\"device\":{\"ids\":[\"NodeRed_1\"],\"model\":\"ESPEASY\",\"manufacturer\":\"ESPEASY\",\"name\":\"NodeRed_1\"},\"temperature_command_topic\":\"IEE/NodeRed_1/Time/Time/Set\",\"mode_command_topic\":\"IEE/NodeRed_1/Time/Time/Mode\",\"temp_step\":0.25}",
       "payloadType":"json",
       "x":810,
-      "y":580,
+      "y":440,
       "wires":[
          [
             "61dc00b3.b4bf",
@@ -1149,7 +1093,7 @@
       "datatype":"auto",
       "broker":"18ac67d8.ba0268",
       "x":490,
-      "y":1100,
+      "y":960,
       "wires":[
          [
             "6b853310.6e826c"
@@ -1168,8 +1112,8 @@
       "complete":"false",
       "statusVal":"",
       "statusType":"auto",
-      "x":830,
-      "y":1100,
+      "x":1090,
+      "y":960,
       "wires":[
          
       ]
@@ -1185,12 +1129,126 @@
       "initialize":"",
       "finalize":"",
       "x":620,
-      "y":1100,
+      "y":960,
       "wires":[
          [
-            "3027cc12.6e1f24",
-            "61dc00b3.b4bf"
+            "61dc00b3.b4bf",
+            "cbfd5ad0.5c4b38"
          ]
+      ]
+   },
+   {
+      "id":"7a7c9b87.43bac4",
+      "type":"switch",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "property":"Debug",
+      "propertyType":"flow",
+      "rules":[
+         {
+            "t":"true"
+         }
+      ],
+      "checkall":"true",
+      "repair":false,
+      "outputs":1,
+      "x":950,
+      "y":920,
+      "wires":[
+         [
+            "7d13c4d8.26b26c"
+         ]
+      ]
+   },
+   {
+      "id":"cbfd5ad0.5c4b38",
+      "type":"switch",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "property":"Debug",
+      "propertyType":"flow",
+      "rules":[
+         {
+            "t":"true"
+         }
+      ],
+      "checkall":"true",
+      "repair":false,
+      "outputs":1,
+      "x":950,
+      "y":960,
+      "wires":[
+         [
+            "3027cc12.6e1f24"
+         ]
+      ]
+   },
+   {
+      "id":"841a8c4e.81a6",
+      "type":"inject",
+      "z":"c7a7e5ea.d0e448",
+      "name":"SingelTopic",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":true,
+      "onceDelay":0.1,
+      "topic":"",
+      "payload":"EE/TV_R_11/Stepper/Percent",
+      "payloadType":"str",
+      "x":1290,
+      "y":160,
+      "wires":[
+         [
+            "a44751e2.5b03c"
+         ]
+      ]
+   },
+   {
+      "id":"a44751e2.5b03c",
+      "type":"change",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "rules":[
+         {
+            "t":"set",
+            "p":"SingelTopic",
+            "pt":"flow",
+            "to":"payload",
+            "tot":"msg"
+         }
+      ],
+      "action":"",
+      "property":"",
+      "from":"",
+      "to":"",
+      "reg":false,
+      "x":1470,
+      "y":160,
+      "wires":[
+         [
+            
+         ]
+      ]
+   },
+   {
+      "id":"6a88dbee.ddb744",
+      "type":"comment",
+      "z":"c7a7e5ea.d0e448",
+      "name":"Example Devices",
+      "info":"",
+      "x":780,
+      "y":400,
+      "wires":[
+         
       ]
    },
    {
