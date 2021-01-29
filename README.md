@@ -72,7 +72,7 @@ on Import#Percentage do
  taskrun,2
 endon
 on Import#State do
- taskvalueset,2,3,[Import#State]
+ taskvalueset,2,2,[Import#State]
  if [Import#State]=1 then
   taskvalueset,2,1,[Import#Percentage]
  else
