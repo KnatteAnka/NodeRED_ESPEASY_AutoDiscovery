@@ -1,9 +1,11 @@
 # NodeRED_ESPEASY_AutoDiscovery  
-Flow to enable autodiscovery for EasyEsp without have the code on each device 
+[Main Install](MainInstall.md)  
+[Device Install](Devices.md)  
+[Advance Settings](Advance.md)  
 
-# Node-Red
-* the Flow creates an device on Home assistant according to the name of the variable
-* if a variable starts with "_" then its skipped
+* The Flow creates an device on Home assistant according to the name of the variable
+* Enable autodiscovery for EasyEsp without have the code on each device 
+* If a variable starts with "_" then its skipped
 
 * Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
 
@@ -17,7 +19,8 @@ Yes | Dimmer 0-100
 Yes | Dimmer 0-255  
 Not yet  | Termostat temperature output
 
-[Main Install](MainInstall.md)  
-[Device Install](Devices.md)  
-[Advance Settings](Advance.md)  
+plz tell if you miss any device from 
+https://www.home-assistant.io/docs/mqtt/discovery/
+
+
 
