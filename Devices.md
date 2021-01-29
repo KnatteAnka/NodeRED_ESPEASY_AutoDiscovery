@@ -1,10 +1,17 @@
+# NodeRED_ESPEASY_AutoDiscovery  
+[Main Install](MainInstall.md)  
+[Device Install](Devices.md)  
+[Advance Settings](Advance.md)  
+[Start](Readme.md)  
 
-**Sensorer:**
+# Devices:
+
+# Sensorer:
 You only need to activate the device and set it to use the HA controller:
 
 
 
-**Switch:**
+# Switch:
 create a dummy device and set the name of a value to include "Relay" or "Switch" as default  
 
 add a new rule with the name Set%tskname% (exampel SetRelay if value is Relay)   
@@ -16,7 +23,7 @@ on SetRelay do
 endon
 ```
 
-**Dimmer:**
+# Dimmer:
 1. Create a dummy device 
 2. Set a name of a value to include "Percent" or "Brightness"
 3. Set one more to with prefix "_" example "_Percent" and set it to 0 Decimals
@@ -43,4 +50,6 @@ on Import#State do
  taskrun,2
 endon
 ```
-**RGBDimmer**
+# RGBDimmer
+
+# Termostat and decimal input
