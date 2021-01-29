@@ -1,3 +1,8 @@
+# NodeRED_ESPEASY_AutoDiscovery
+[Start](Readme.md)  
+[Device Install](Devices.md)  
+[Advance Settings](Advance.md)  
+
 # Install Node-Red node  
 1. Copy [MQTTDiscovery.json](MQTTDiscovery.json) and import in Node-Red
 2. Change/Update the MQTT nodes with correct security and other settings
