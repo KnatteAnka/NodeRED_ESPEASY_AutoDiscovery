@@ -1,6 +1,6 @@
 # NodeRED_ESPEASY_AutoDiscovery  
 [Start](Readme.md)  
-[Main Install](MainInstall.md)  <!--[Start](Readme.md)  -->
+[Main Install](MainInstall.md)<!--[Start](Readme.md)  -->  
 [Advance Settings](Advance.md)  
 
 
