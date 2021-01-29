@@ -53,5 +53,8 @@ on Import#State do
 endon
 ```
 # RGBDimmer
+1. Do all 7 Steps from Dimmer but in step 2 set the name to "RGBBrightness"
+2. Add an secound MQTT import device
+3. set the names to "R","G","B" and topic to MQTT topic of RGBBrightness and add "/_R","/_G","/_B"
 
 # Termostat and decimal input
