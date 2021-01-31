@@ -1,10 +1,13 @@
 # NodeRED_ESPEASY_AutoDiscovery  
-[Start](README.md) 
+[Start](README.md)  
 [Main Install](MainInstall.md)  
-[Advance Settings](Advance.md)  
+[Device Install](Devices.md)  
+<!--[Advance Settings](Advance.md)  -->
 
 
 # AdvanceSettings
+**Flow Node-Red**
+![Flow_Node-Red](PNG/Flow_Node-Red.PNG)
 The Node-Red inject Node Settings:
 containt 3 different settings arrays:
 1. is an Array of Sensor settings
