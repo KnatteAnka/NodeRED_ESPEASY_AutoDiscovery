@@ -73,6 +73,6 @@ this variable is the shown temperature in big at the Termostat)
 7. if Step 5 is done  set next as step 6 but with sufix /FanMode
 
 **MQTT Import**  
-![MQTT Import](PNG/Termostat_MQTTImport.PNG)
+![MQTT Import](PNG/Termostat_MQTTImport.PNG)  
 **Dummy Device**  
-![Dummy Device](PNG/Termostat_DummyDevice.PNG)
+![Dummy Device](PNG/Termostat_DummyDevice.PNG)  
