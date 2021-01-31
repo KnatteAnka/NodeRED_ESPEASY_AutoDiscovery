@@ -13,7 +13,7 @@
 # EasyESP:  
 Setup EasyESP:  
 **Controller:**  
-![EasyEsp Controller](Controller.PNG)
+![EasyEsp Controller](PNG/Controller.PNG)
 
 Controller Subscribe: EE/%sysname%/#
 
