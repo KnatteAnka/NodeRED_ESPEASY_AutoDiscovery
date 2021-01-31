@@ -37,9 +37,9 @@ endon
 
 (Exampel image both Devices)  
 **MQTT Import**  
-![MQTT Import](Dimmer_MQTTImport.PNG)
+![MQTT Import](PNG/Dimmer_MQTTImport.PNG)
 **Dummy Device**  
-![Dummy Device](Dimmer_DummyDevice.PNG)
+![Dummy Device](PNG/Dimmer_DummyDevice.PNG)
 ```
 on Import#Percentage do
  taskvalueset,2,1,%eventvalue%
