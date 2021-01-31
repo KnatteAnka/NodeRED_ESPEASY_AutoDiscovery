@@ -17,7 +17,7 @@ Yes | Switch
 Yes | RGB Led  
 Yes | Dimmer 0-100  
 Yes | Dimmer 0-255  
-Not yet  | Termostat temperature output
+Yes  | Termostat temperature output
 
 plz tell if you miss any device from 
 https://www.home-assistant.io/docs/mqtt/discovery/
