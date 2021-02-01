@@ -11,6 +11,7 @@
 if MQTT import is needed to be used then the first MQTT controller needs to have no username or password and be disabled
 
 # Devices:
+**Always do a restart of EasyESP device after name change or changes to MQTT Controller**
 
 ## Sensorer:
 You only need to activate the device and set it to use the HA controller:
