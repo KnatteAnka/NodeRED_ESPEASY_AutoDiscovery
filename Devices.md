@@ -3,6 +3,10 @@
 [Main Install](MainInstall.md)<!--[Start](Readme.md)  -->  
 [Advance Settings](Advance.md)  
 
+---
+
+[Switch](#switch) | [Dimmer](#dimmer) | [RGBDimmer](#rgbdimmer) | [Termostat](#termostat)   
+
 **MQTT Import info:**  
 if MQTT import is needed to be used then the first MQTT controller needs to have no username or password and be disabled
 
