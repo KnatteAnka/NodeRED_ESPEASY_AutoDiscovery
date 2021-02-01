@@ -70,7 +70,7 @@ endon
 2. Set a name of a value to include "SetTemp" or "SetTime"  
 (different settings of max and min temp as default  
 this variable is the shown temperature in big at the Termostat)
-3. Create a MQTT Device
+3. Create a MQTT Import Device
 4. Set one variable to the same name as in step 2
 5. if needed set one more to SetMode
 6. Set first topic to Dummy devices topic and add /Set
