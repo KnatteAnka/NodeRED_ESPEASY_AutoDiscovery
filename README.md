@@ -10,9 +10,9 @@
 * Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
 
 ## Device list under configuration:
-![HA Device List](PNG/HA Devices.PNG)
+![HA Device List](PNG/HA_Devices.PNG)
 ## Each device show all entitys that is connected to it.
-![HA one Device](PNG/HA 1Device.PNG)
+![HA one Device](PNG/HA_1Device.PNG)
 
 Support | devices:  
 --------|---------
