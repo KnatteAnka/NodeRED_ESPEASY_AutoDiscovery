@@ -9,6 +9,10 @@
 
 * Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
 
+## Device list under configuration:
+![HA Device List](PNG/HA Devices.PNG)
+## Each device show all entitys that is connected to it.
+![HA one Device](PNG/HA 1Device.PNG)
 
 Support | devices:  
 --------|---------
@@ -22,5 +26,5 @@ Yes  | Termostat temperature output
 plz tell if you miss any device from 
 https://www.home-assistant.io/docs/mqtt/discovery/
 
-
+![Flow_Node-Red](PNG/Flow_Node-Red_Settings.PNG)
 
