@@ -32,7 +32,7 @@ endon
 
 ## Dimmer:
 1. Create a dummy device 
-2. Set a name of a value to include "Percent" or "Brightness"
+2. Set a name of a value to include "Percent"(0-100) or "Brightness"(0-255)
 3. Set one more to with prefix "_" example "_Percent" and set it to 0 Decimals
 3. Create a MQTT import device
 4. Set a name to the same as step 2 and one to State
