@@ -8,6 +8,7 @@
 2. Change/Update the MQTT nodes with correct security and other settings
 3. Deploy it
 4. run inject button Save List to create a starting point.
+![NodeRed Flow](PNG/Flow_Node-Red_Install.PNG)
 
 # EasyESP:  
 Setup EasyESP:  
