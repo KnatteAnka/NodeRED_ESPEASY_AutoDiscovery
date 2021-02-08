@@ -10,10 +10,10 @@
 4. run inject button Save List to create a starting point.
 ![NodeRed Flow](PNG/Flow_Node-Red_Install.PNG)
 
-# EasyESP:  
+# EasyESP: 
+# !Home assistant do only support A-Z,_,0-9 in any name!  
 Setup EasyESP:  
 **Controller:** 
-# !Home assistant do only support A-Z,_,0-9 in any name!
 ![EasyEsp Controller](PNG/Controller.PNG)
 
 Controller Subscribe: EE/%sysname%/#
