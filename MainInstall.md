@@ -12,7 +12,8 @@
 
 # EasyESP:  
 Setup EasyESP:  
-**Controller:**  
+**Controller:** 
+# !Home assistant do only support A-Z,_,0-9 in any name!
 ![EasyEsp Controller](PNG/Controller.PNG)
 
 Controller Subscribe: EE/%sysname%/#
