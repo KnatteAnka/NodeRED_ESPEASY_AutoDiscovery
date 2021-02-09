@@ -30,6 +30,19 @@ on SetRelay do
  taskrun,3
 endon
 ```
+rule for setting Relay and led of Shelly plug with EE or with button press:
+```
+on Button#State=0 do
+ logentry,Toggeling Relay
+ taskValueSet,3,1,1-[Relay#relay]
+ event,Relay#relay
+endon
+on Relay#relay do
+ gpio,15,[Relay#relay]
+ let,1,1-[Relay#relay]
+ gpio,0,%v1%
+endon
+```
 
 ## Dimmer:
 1. Create a dummy device 
