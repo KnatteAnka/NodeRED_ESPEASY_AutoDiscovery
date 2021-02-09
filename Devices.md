@@ -27,6 +27,7 @@ Exampel:
 ```
 on SetRelay do
  taskvalueset,3,1,%eventvalue%
+ taskrun,3
 endon
 ```
 
@@ -76,7 +77,14 @@ this variable is the shown temperature in big at the Termostat)
 5. if needed set one more to SetMode
 6. Set first topic to Dummy devices topic and add /Set
 7. if Step 5 is done  set next as step 6 but with sufix /FanMode
-
+8. Add below rule for moving value to Dummydevice if needed.
+9. use the sent Temperature and Mode how you see fit use
+```
+on Import#SetTemp do
+ Taskvalueset,devicenr,varNr,%eventvalue%
+ taskrun,devicenr
+endon 
+```
 **MQTT Import**  
 ![MQTT Import](PNG/Termostat_MQTTImport.PNG)  
 **Dummy Device**  
