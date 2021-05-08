@@ -27,6 +27,12 @@ Will Retain: True
 if the device needs to use MQTT import device then you need 2 mqtt controllers configurated the same  
 but the first has to not have any username or password and can be disabled.  
 
+## Error message:
+If Device is setup incorrect it will display a error message in Homeassistant and in the Flow  
+That tells you what part has unsupported characters  
+![HA Notice](PNG/ErrorNotice.png)  
+# !Home assistant do only support A-Z,_,0-9 in any name!  
+
 ## Update Node-Red Flow
 1. Renmame the old flow to MQTT Discovery(Old)
 2. do Install Node-Red Flow steps
