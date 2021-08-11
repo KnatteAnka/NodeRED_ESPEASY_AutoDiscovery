@@ -19,7 +19,9 @@ containt 3 different settings arrays:
    2. Type is the device type to create
    3. Brightness is the max value to output when home assistent is set to 100%
    4. RGB is if it should output RGB or not and give the device controlls for it.
-3. "UseDefaultUnit" is a setting if the unit is not found if it should use ValueName
+3. "UseDefaultUnit" is a setting if the unit is not found if it should use ValueName 
+4. "DefaultUnit" if variable is defined it Replaces ValueName of UseDefaultUnit.
+      This it to get around standard behavior that it shows states not as a graph in Home assistant.
 ![Flow_Node-Red](PNG/Flow_Node-Red_Settings.PNG)
 
 # Reset Autodiscovery
