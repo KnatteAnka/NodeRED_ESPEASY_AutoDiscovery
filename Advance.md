@@ -8,8 +8,9 @@
 # AdvanceSettings
 **Flow Node-Red**
 ![Flow_Node-Red](PNG/Flow_Node-Red.PNG)
-The Node-Red inject Node Settings:
-containt 3 different settings arrays:
+The Node-Red **inject Node Settings**:
+containt 3 different settings arrays:  
+*Settings inside Function node is if settings is not run or missing!*
 1. "Units" is an Array of Sensor settings
    1. Valuename is the name of the variable to search for exact match needed  
    2. Unit is the sufix for the sensor to use  
