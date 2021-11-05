@@ -6,10 +6,13 @@
 # Install Node-Red Flow  
 1. Copy [MQTTDiscovery.json](MQTTDiscovery.json) and import in Node-Red
 2. Change/Update the MQTT nodes with correct security and other settings
-3. Deploy it
+3. Update Node with connection to homeassistant if not in same container(HA Plugin)
+4. Deploy it
 * Until Save list is clicked an error will be shown when deloying  
  "Error: ENOENT: no such file or directory, open '/config/EasyESP_MQTTDisc.txt'" (file not found)
-4. Run inject button Save List to create a starting point.
+5. Run inject button Save List to create a starting point.    
+
+**A.** Contains Settings that can be changed if nessesery se Advance Settings
 ![NodeRed Flow](PNG/Flow_Node-Red_Install.PNG)
 
 # EasyESP: 
