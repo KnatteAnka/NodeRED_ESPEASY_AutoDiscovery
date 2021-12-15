@@ -17,6 +17,9 @@ Yes | RGB Led
 Yes | Dimmer 0-100  
 Yes | Dimmer 0-255  
 Yes  | Termostat temperature output
+No | Selects
+No | Buttons
+No | Numbers
 
 ## Device list under configuration:
 ![HA Device List](PNG/HA_Devices.PNG)
