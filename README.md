@@ -9,14 +9,15 @@
 
 * Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
 
- **Support** | **devices:**  
---------|---------
-Yes | Sensors 
-Yes | Switch
-Yes | RGB Led  
-Yes | Dimmer 0-100  
-Yes | Dimmer 0-255  
-Yes  | Termostat temperature output
+ **Support** | **devices:** | **ValueNames** 
+--------|---------|---------
+Yes | Sensors | All other
+Yes | Switch | State,Relay
+Yes | RGB Led | RGBBrightness 
+Yes | Dimmer 0-100 | Percent 
+Yes | Dimmer 0-255 | Brightness 
+Yes | Dimmer 0-240 | CounterTime
+Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
 No | Selects
 No | Buttons
 No | Numbers
