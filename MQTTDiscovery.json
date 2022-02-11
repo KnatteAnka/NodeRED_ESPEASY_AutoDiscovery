@@ -180,8 +180,8 @@
       "id":"38ffc90b.146236",
       "type":"function",
       "z":"c7a7e5ea.d0e448",
-      "name":"",
-      "func":"\nfunction VerifyTextUnicodeCharacters(text)\n{\n    //Check if Text contains any Not allowed Chars \n    //Input: String to test\n    //Output: Array first val is true if all is good secound is the not allowed chars\n    var notSupportArray = [];\n    for (var i = text.length - 1; i >= 0; i--)\n        {\n            var charCode = text.charCodeAt(i);\n            // 0-9 48-57\n            // A-Z 65-90 , 97-122\n            // _ 95\n            if ((charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90) || (charCode == 95) || (charCode >= 97 && charCode <= 122))\n            {\n                \n            }\n            else\n            {\n                notSupportArray.push(charCode);\n            }\n        }\n    \n    if (notSupportArray.length == 0)\n        {\n            return [true,\"\"]\n        }\n    else\n        {\n            return [false,notSupportArray];\n        }\n}\n\nvar InputPayload = msg.topic.split(\"/\")\n//Check if currect amount of \"/\" if not skipp the package\nvar Debug = flow.get(\"Debug\")\nif (InputPayload.length !=4 ){\n    if(Debug)node.warn(\"Skipping Topic:\"+msg.topic+\"\\n Payload:\"+msg.payload+\"\\n not correct amount of '/'\") \n    return  \n} \nInputPayload = [InputPayload]\nInputPayload = {\n    Prefix:InputPayload[0][0],\n    Unit:InputPayload[0][1],\n    TaskName:InputPayload[0][2],\n    Value:InputPayload[0][3]\n}\n//--------------------------------------\n// Debug Message header\nvar Message =(\"Recived:\"+\n\"\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n//--------------------------------------\n// Test that only allowed chars is used\nvar Test = [\n    {Test:\"Prefix\", Value:InputPayload.Prefix,   Title:\"Prefix have not allowed chars\"+InputPayload.Prefix},    // Test Prefix\n    {Test:\"Unit\",   Value:InputPayload.Unit,     Title:\"Unit have not allowed chars\"+InputPayload.Unit},            // Test Unit\n    {Test:\"Device\", Value:InputPayload.TaskName, Title:\"Device have not allowed chars\"+InputPayload.TaskName},// Test Device\n    {Test:\"Value\",  Value:InputPayload.Value,    Title:\"Value have not allowed chars\"+InputPayload.Value}         // Test Value\n];\nMessage += \"\\n\\nTest allowed Chars:\"\nvar FoundError = false\nfor (var AA in Test){\n    // Test String in Test[AA].Value\n    // if false send notice with node.send\n    // and break \n  \n    var Result = VerifyTextUnicodeCharacters(Test[AA].Value)\n    Message += \"\\n\"+Test[AA].Test+\":\\t\"\n    if (Result[0]){\n        Message +=\"Allowed\"\n    }else{\n        Message +=\"'\"\n        for (var BB in Result[1]){\n            Message += String.fromCharCode(Result[1][BB])\n        }\n        Message += \"'\"+ \" Not Allowed\"    \n    }\n  if (!Result[0])FoundError=true\n}\n\nif (FoundError){\n    //Found errors send message and break this packet.\n    var NoticeTitle = \"Device Incorrect installed:\"\n    if (InputPayload.Value!=\"LWT\") node.send([null,{payload:{data:{\"title\":NoticeTitle,\"message\":Message}}}])\n\n    throw new Error(Message);\n}\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = false\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nfor (var BB in CurrentList){\n    var Found = 4\n    for (var CC in CurrentList[BB]){\n        if (CurrentList[BB][CC]==InputPayload[CC])Found -= 1\n    }\n    if (Found==0) Found2 = true\n    \n    \n    if (Found2){\n        Message +=\"\\nFound Topic in List at:\"+BB\n        break\n        \n    }    \n}\n\nif (!Found2&&CheckPrefix!=\"_\"){\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"sensor\"\n    //Prepare MQTT message\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,//\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.topic//,\n     //unit_of_measurement : \"\",\n     \n    }\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var NotSensors = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Units = [\n        {\n            \"ValueName\": \"battery\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"battery\"\n        },\n        {\n            \"ValueName\": \"humidity\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"humidity\"\n        },\n        {\n            \"ValueName\": \"temperature\",\n            \"Unit\": \"°C\",\n            \"Device_Class\": \"temperature\"\n        },\n        {\n            \"ValueName\": \"power\",\n            \"Unit\": \"W\",\n            \"Device_Class\": \"power\"\n        },\n        {\n            \"ValueName\": \"pressure\",\n            \"Unit\": \"hPA\",\n            \"Device_Class\": \"pressure\"\n        },\n        {\n            \"ValueName\": \"current\",\n            \"Unit\": \"A\",\n            \"Device_Class\": \"current\"\n        },\n        {\n            \"ValueName\": \"energy\",\n            \"Unit\": \"KWh\",\n            \"Device_Class\": \"energy\"\n        },\n        {\n            \"ValueName\": \"voltage\",\n            \"Unit\": \"V\",\n            \"Device_Class\": \"voltage\"\n        },\n        {\n            \"ValueName\": \"gm\",\n            \"Unit\": \"GM\"\n        }\n    ]\n    //Import settings if variable is declared \n    if (Settings.NotSensors!=undefined){\n        NotSensors = Settings.NotSensors\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n    var FoundObject = {}    \n    for (var AA in NotSensors){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+NotSensors[AA][0])\n       if (NotSensors[AA].ValueName!=undefined&&NotSensors[AA].Type!=undefined){\n            var Check = InputPayload.Value.indexOf(NotSensors[AA].ValueName)\n            if (Check>-1){\n                //Found that its declared and the set the type\n                FoundObject = NotSensors[AA]\n                type=NotSensors[AA].Type\n                \n            }\n       }    \n    }\n    \n    //node.warn(\"Check Light:\"+FoundObject.Brightness)\n    if (type==\"light\"){\n        Message += \"Device is a Light\"\n        //node.warn(\"Check Light:\"+InputPayload.TaskName)\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n        //Values.optimistic = true\n        Values.command_topic = BaseTopic+\"/State\"\n        Values.payload_on = 1.00\n        Values.payload_off = 0.00\n        if (FoundObject.Brightness==undefined) Values.brightness_scale=100\n        else Values.brightness_scale = FoundObject.Brightness\n        Values.brightness_state_topic =BaseTopic\n        Values.brightness_command_topic = BaseTopic+\"/Set\"\n        var SetRGB=false\n        if(FoundObject.RGB!=undefined) SetRGB=FoundObject.RGB\n        if (SetRGB){\n            Values.optimistic = true\n            Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n            \n        }\n        \n    }\n    if (type==\"switch\"){\n        Message += \"Device is a Switch\"\n        Values.state_off = 0\n        Values.state_on = 1\n        Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n        Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n        Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n    }\n    if (type==\"climate\"){\n        Message += \"Device is a climate\"\n        delete Values['state_topic']\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        if (FoundObject.max_temp!=undefined) Values.max_temp = FoundObject.max_temp\n        if (FoundObject.min_temp!=undefined) Values.min_temp = FoundObject.min_temp\n        if (FoundObject.temp_step!=undefined) Values.temp_step = FoundObject.temp_step\n        if (FoundObject.mode_state_topic!=undefined)Values.mode_state_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_FanModeSet\"\n        Values.temperature_command_topic = BaseTopic+\"/Set\"\n        Values.current_temperature_topic = BaseTopic\n        Values.mode_command_topic =  \"O\"+BaseTopic+\"/FanMode\"\n        \n    }\n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    var Found = false\n    if (type==\"sensor\"){\n        Message += \"Device is a Sensor\"\n        for (var AA in Units){\n            if (Units[AA].ValueName==Test_type){\n                if (Units[AA].Device_Class!=undefined){\n                    Values.device_class=Units[AA].Device_Class\n                }    \n                Found=true\n                Values.unit_of_measurement=Units[AA].Unit\n            }    \n        }\n        if(Debug)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n        if (!Found){\n            if (Settings.UseDefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value\n            }\n            else if (Settings.UseDefaultUnit==true){\n              //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n              if (Settings.DefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value  \n              }else{\n                Values.unit_of_measurement = Settings.DefaultUnit  \n              }\n            } \n        }\n    }\n    Values.unique_id= type+\".\"+Values.unique_id\n    Values.unique_id= Values.unique_id.toLowerCase()\n    Message += \"\\n\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n}\nflow.set(\"List\",CurrentList)\nif(Debug)node.warn(Message)\n",
+      "name":"MainScript (1)",
+      "func":"\nfunction VerifyTextUnicodeCharacters(text)\n{\n    //Check if Text contains any Not allowed Chars \n    //Input: String to test\n    //Output: Array first val is true if all is good secound is the not allowed chars\n    var notSupportArray = [];\n    for (var i = text.length - 1; i >= 0; i--)\n        {\n            var charCode = text.charCodeAt(i);\n            // 0-9 48-57\n            // A-Z 65-90 , 97-122\n            // _ 95\n            if ((charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90) || (charCode == 95) || (charCode >= 97 && charCode <= 122))\n            {\n                \n            }\n            else\n            {\n                notSupportArray.push(charCode);\n            }\n        }\n    \n    if (notSupportArray.length == 0)\n        {\n            return [true,\"\"]\n        }\n    else\n        {\n            return [false,notSupportArray];\n        }\n}\n\nvar InputPayload = msg.topic.split(\"/\")\n//Check if currect amount of \"/\" if not skipp the package\nvar Debug = flow.get(\"Debug\")\nif (InputPayload.length !=4 ){\n    if(Debug==1)node.warn(\"Skipping Topic:\"+msg.topic+\"\\n Payload:\"+msg.payload+\"\\n not correct amount of '/'\") \n    return  \n} \nInputPayload = [InputPayload]\nInputPayload = {\n    Prefix:InputPayload[0][0],\n    Unit:InputPayload[0][1],\n    TaskName:InputPayload[0][2],\n    Value:InputPayload[0][3]\n}\n//--------------------------------------\n// Debug Message header\nvar Message =(\"Recived:\"+\n\"\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n//--------------------------------------\n// Test that only allowed chars is used\nvar Test = [\n    {Test:\"Prefix\", Value:InputPayload.Prefix,   Title:\"Prefix have not allowed chars\"+InputPayload.Prefix},    // Test Prefix\n    {Test:\"Unit\",   Value:InputPayload.Unit,     Title:\"Unit have not allowed chars\"+InputPayload.Unit},            // Test Unit\n    {Test:\"Device\", Value:InputPayload.TaskName, Title:\"Device have not allowed chars\"+InputPayload.TaskName},// Test Device\n    {Test:\"Value\",  Value:InputPayload.Value,    Title:\"Value have not allowed chars\"+InputPayload.Value}         // Test Value\n];\nMessage += \"\\n\\nTest allowed Chars:\"\nvar FoundError = false\nfor (var AA in Test){\n    // Test String in Test[AA].Value\n    // if false send notice with node.send\n    // and break \n  \n    var Result = VerifyTextUnicodeCharacters(Test[AA].Value)\n    Message += \"\\n\"+Test[AA].Test+\":\\t\"\n    if (Result[0]){\n        Message +=\"Allowed\"\n    }else{\n        Message +=\"'\"\n        for (var BB in Result[1]){\n            Message += String.fromCharCode(Result[1][BB])\n        }\n        Message += \"'\"+ \" Not Allowed\"    \n    }\n  if (!Result[0])FoundError=true\n}\n\nif (FoundError){\n    //Found errors send message and break this packet.\n    var NoticeTitle = \"Device Incorrect installed:\"\n    if (InputPayload.Value!=\"LWT\") node.send([null,{payload:{data:{\"title\":NoticeTitle,\"message\":Message}}}])\n\n    throw new Error(Message);\n}\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = false\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nfor (var BB in CurrentList){\n    var Found = 4\n    for (var CC in CurrentList[BB]){\n        if (CurrentList[BB][CC]==InputPayload[CC])Found -= 1\n    }\n    if (Found==0) Found2 = true\n    \n    \n    if (Found2){\n        Message +=\"\\nFound Topic in List at:\"+BB\n        break\n        \n    }    \n}\n\nif (!Found2&&CheckPrefix!=\"_\"){\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"sensor\"\n    //Prepare MQTT message\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,//\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.topic//,\n     //unit_of_measurement : \"\",\n     \n    }\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var NotSensors = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Units = [\n        {\n            \"ValueName\": \"battery\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"battery\"\n        },\n        {\n            \"ValueName\": \"humidity\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"humidity\"\n        },\n        {\n            \"ValueName\": \"temperature\",\n            \"Unit\": \"°C\",\n            \"Device_Class\": \"temperature\"\n        },\n        {\n            \"ValueName\": \"power\",\n            \"Unit\": \"W\",\n            \"Device_Class\": \"power\"\n        },\n        {\n            \"ValueName\": \"pressure\",\n            \"Unit\": \"hPA\",\n            \"Device_Class\": \"pressure\"\n        },\n        {\n            \"ValueName\": \"current\",\n            \"Unit\": \"A\",\n            \"Device_Class\": \"current\"\n        },\n        {\n            \"ValueName\": \"energy\",\n            \"Unit\": \"KWh\",\n            \"Device_Class\": \"energy\"\n        },\n        {\n            \"ValueName\": \"voltage\",\n            \"Unit\": \"V\",\n            \"Device_Class\": \"voltage\"\n        },\n        {\n            \"ValueName\": \"gm\",\n            \"Unit\": \"GM\"\n        }\n    ]\n    //Import settings if variable is declared \n    if (Settings.NotSensors!=undefined){\n        NotSensors = Settings.NotSensors\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n    var FoundObject = {}    \n    for (var AA in NotSensors){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+NotSensors[AA][0])\n       if (NotSensors[AA].ValueName!=undefined&&NotSensors[AA].Type!=undefined){\n            var Check = InputPayload.Value.indexOf(NotSensors[AA].ValueName)\n            //node.warn(\"Testing Check\"+Check+\" For Value:\"+InputPayload.Value +\"Against: \"+NotSensors[AA].ValueName)\n            //node.warn(\"Check:\"+Check+\" Compare against:\"+InputPayload.Value+\" NotSernsors:\")\n            //node.warn(NotSensors[AA])\n            if (Check>-1){\n                //Found that its declared and the set the type\n                FoundObject = NotSensors[AA]\n                type=NotSensors[AA].Type\n                \n            }\n       }    \n    }\n    \n    //node.warn(\"Check Light:\"+FoundObject.Brightness)\n    if (type==\"light\"){\n        Message += \"Device is a Light\"\n        //node.warn(\"Check Light:\"+InputPayload.TaskName)\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n        //Values.optimistic = true\n        Values.command_topic = BaseTopic+\"/State\"\n        Values.payload_on = 1.00\n        Values.payload_off = 0.00\n        if (FoundObject.Brightness==undefined) Values.brightness_scale=100\n        else Values.brightness_scale = FoundObject.Brightness\n        Values.brightness_state_topic =BaseTopic\n        Values.brightness_command_topic = BaseTopic+\"/Set\"\n        var SetRGB=false\n        if(FoundObject.RGB!=undefined) SetRGB=FoundObject.RGB\n        if (SetRGB){\n            Values.optimistic = true\n            Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n            \n        }\n        \n    }\n    if (type==\"switch\"){\n        Message += \"Device is a Switch\"\n        Values.state_off = 0\n        Values.state_on = 1\n        Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n        Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n        Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n    }\n    if (type==\"climate\"){\n        Message += \"Device is a climate\"\n        delete Values['state_topic']\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        if (FoundObject.max_temp!=undefined) Values.max_temp = FoundObject.max_temp\n        if (FoundObject.min_temp!=undefined) Values.min_temp = FoundObject.min_temp\n        if (FoundObject.temp_step!=undefined) Values.temp_step = FoundObject.temp_step\n        if (FoundObject.mode_state_topic!=undefined)Values.mode_state_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_FanModeSet\"\n        Values.temperature_command_topic = BaseTopic+\"/Set\"\n        Values.current_temperature_topic = BaseTopic\n        Values.mode_command_topic =  \"O\"+BaseTopic+\"/FanMode\"\n        \n    }\n    if (type==\"select\"){\n        Message += \"Device is a select\"\n        var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n        Values.command_topic = BaseTopic+\"/Set\"\n        Values.options = FoundObject.options\n        \n        Values.value_template = \"{{['\"\n        Values.command_template = \"{% for List in ['\"\n        var LastEntry = Values.options.length-1\n        for (var i in Values.options) {\n            Values.value_template += Values.options[i]\n            Values.command_template +=Values.options[i]\n            if (i != LastEntry){\n                Values.value_template+=\"', '\"\n                Values.command_template+=\"', '\"\n            }\n        }\n        Values.value_template += \"'][value|int]}}\"\n        Values.command_template += \"'] %}{% if List == value %}{{loop.index0}}{%endif%}{% endfor %}\"\n    }\n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    \n    var Found = false\n    if (type==\"sensor\"){\n        Message += \"Device is a Sensor\"\n        for (var AA in Units){\n            var Check = Units[AA].ValueName==Test_type\n            var Check2 = false;\n            if (Settings.UnitsContainsName!=undefined&!Check){\n                if(Settings.UnitsContainsName){\n                    Check2 = Test_type.indexOf(Units[AA].ValueName)\n                    if (Check2 >-1)Check = true\n                }\n            }\n            //node.warn(\"Testing Check2: \"+Check2+\" For Value: \"+Units[AA].ValueName +\" Against: \"+Test_type)\n            if (Check){\n                if (Units[AA].Device_Class!=undefined){\n                    Values.device_class=Units[AA].Device_Class\n                }    \n                Found=true\n                Values.unit_of_measurement=Units[AA].Unit\n            }    \n        }\n        if(Debug==1)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n        if (!Found){\n            if (Settings.UseDefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value\n            }\n            else if (Settings.UseDefaultUnit==true){\n              //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n              if (Settings.DefaultUnit==undefined){\n                Values.unit_of_measurement = InputPayload.Value  \n              }else{\n                Values.unit_of_measurement = Settings.DefaultUnit  \n              }\n            } \n        }\n    }\n    Values.unique_id= type+\".\"+Values.unique_id\n    Values.unique_id= Values.unique_id.toLowerCase()\n    Message += \"\\n\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n}\nflow.set(\"List\",CurrentList)\nif(Debug==1)node.warn(Message)\n",
       "outputs":2,
       "noerr":0,
       "initialize":"",
@@ -189,7 +189,7 @@
       "libs":[
          
       ],
-      "x":820,
+      "x":840,
       "y":780,
       "wires":[
          [
@@ -444,35 +444,6 @@
       ]
    },
    {
-      "id":"3c898208.b1b99e",
-      "type":"inject",
-      "z":"c7a7e5ea.d0e448",
-      "name":"",
-      "props":[
-         {
-            "p":"payload"
-         },
-         {
-            "p":"topic",
-            "vt":"str"
-         }
-      ],
-      "repeat":"",
-      "crontab":"",
-      "once":false,
-      "onceDelay":0.1,
-      "topic":"",
-      "payload":"true",
-      "payloadType":"bool",
-      "x":1270,
-      "y":300,
-      "wires":[
-         [
-            "e1fe0ffe.531ce"
-         ]
-      ]
-   },
-   {
       "id":"8e1e2ca7.4581a",
       "type":"inject",
       "z":"c7a7e5ea.d0e448",
@@ -494,7 +465,7 @@
       "payload":"false",
       "payloadType":"bool",
       "x":1270,
-      "y":380,
+      "y":320,
       "wires":[
          [
             "e1fe0ffe.531ce"
@@ -596,7 +567,7 @@
       "topic":"",
       "payload":"ESP_",
       "payloadType":"str",
-      "x":830,
+      "x":810,
       "y":220,
       "wires":[
          [
@@ -782,8 +753,8 @@
       "id":"7f2cabb0.391184",
       "type":"comment",
       "z":"c7a7e5ea.d0e448",
-      "name":"V2.2.3",
-      "info":"# V2.2.3\n - Add possible to enable Set fanmode topic\n   See SetTime\n\n# V2.2.2\n - Change presure to hPa\n  you need to clear list and save list to update your already created devices \n - Added som comments in function node that the settings that is used is in Settings node\n - Documentation updated to show it.\n \n# V2.2.1\n - Added support for changing default unit text\n - Settings inject node updated with new info.\n - Default settings for new device so new units get \".\" as sufix/unit if not found in units list in settings inject node.\n \n\n# V2.2.0\n - Add Send notification if Device is setup wrong and don't Create a device. \n - example unsupported char is used in topic\n - (not A-Z,_,0-9)\n\n# V2.1.2\n - Better Debug output added\n - More correct name of Flow settings\n   you can select what to Input to allow\n   All, none or a Singel topic\n\n# V2.1.1\n - Small bugfix for bug that did that is skipped variable State  \n - Add as New device type for set time with Slider 0-240\n\n# V2.1    \n - Added Termostat \n - Fixed load list function\n        \n# V2.0 Rewrite of original node\n\nhttps://github.com/KnatteAnka/NodeRED_ESPEASY_AutoDiscovery",
+      "name":"V2.3.0",
+      "info":"# V2.3.0\n - Add settings to use part of Variable name      enable part match if name to be valid  \n  UnitsContainsName true is the new default\n - Add support for Select device types See example in Settings node and Device install\n\n\n# V2.2.3\n - Add possible to enable Set fanmode topic  \n   See  Settings for SetTime  \n - OEE/%sysname%/%taskname%/%valname%/FanModeSet   \n - converts to \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5  \n    Sent to EE/%sysname%/%taskname%/%valname%/_FanModeSet\n\n# V2.2.2\n - Change presure to hPa\n  you need to clear list and save list to update your already created devices \n - Added som comments in function node that the settings that is used is in Settings node\n - Documentation updated to show it.\n \n# V2.2.1\n - Added support for changing default unit text\n - Settings inject node updated with new info.\n - Default settings for new device so new units get \".\" as sufix/unit if not found in units list in settings inject node.\n \n\n# V2.2.0\n - Add Send notification if Device is setup wrong and don't Create a device. \n - example unsupported char is used in topic\n - (not A-Z,_,0-9)\n\n# V2.1.2\n - Better Debug output added\n - More correct name of Flow settings\n   you can select what to Input to allow\n   All, none or a Singel topic\n\n# V2.1.1\n - Small bugfix for bug that did that is skipped variable State  \n - Add as New device type for set time with Slider 0-240\n\n# V2.1    \n - Added Termostat \n - Fixed load list function\n        \n# V2.0 Rewrite of original node\n\nhttps://github.com/KnatteAnka/NodeRED_ESPEASY_AutoDiscovery",
       "x":50,
       "y":20,
       "wires":[
@@ -868,7 +839,7 @@
       "once":true,
       "onceDelay":0.1,
       "topic":"",
-      "payload":"{\"Units\":[{\"ValueName\":\"battery\",\"Unit\":\"%\",\"Device_Class\":\"battery\"},{\"ValueName\":\"humidity\",\"Unit\":\"%\",\"Device_Class\":\"humidity\"},{\"ValueName\":\"temperature\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"temp\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"power\",\"Unit\":\"W\",\"Device_Class\":\"power\"},{\"ValueName\":\"pressure\",\"Unit\":\"hPa\",\"Device_Class\":\"pressure\"},{\"ValueName\":\"current\",\"Unit\":\"A\",\"Device_Class\":\"current\"},{\"ValueName\":\"energy\",\"Unit\":\"KWh\",\"Device_Class\":\"energy\"},{\"ValueName\":\"voltage\",\"Unit\":\"V\",\"Device_Class\":\"voltage\"},{\"ValueName\":\"gm\",\"Unit\":\"GM\"},{\"ValueName\":\"elapsedtime\",\"Unit\":\"S\"}],\"NotSensors\":[{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100},{\"ValueName\":\"SetTemp\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":17,\"temp_step\":0.5},{\"ValueName\":\"CounterTime\",\"Type\":\"light\",\"Brightness\":240,\"RGB\":false},{\"ValueName\":\"SetTime\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":0,\"temp_step\":0.5,\"mode_state_topic\":true}],\"UseDefaultUnit\":true,\"DefaultUnit\":\".\"}",
+      "payload":"{\"UnitsContainsName\":true,\"Units\":[{\"ValueName\":\"battery\",\"Unit\":\"%\",\"Device_Class\":\"battery\"},{\"ValueName\":\"humidity\",\"Unit\":\"%\",\"Device_Class\":\"humidity\"},{\"ValueName\":\"temperature\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"temp\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"power\",\"Unit\":\"W\",\"Device_Class\":\"power\"},{\"ValueName\":\"pressure\",\"Unit\":\"hPa\",\"Device_Class\":\"pressure\"},{\"ValueName\":\"current\",\"Unit\":\"A\",\"Device_Class\":\"current\"},{\"ValueName\":\"energy\",\"Unit\":\"KWh\",\"Device_Class\":\"energy\"},{\"ValueName\":\"voltage\",\"Unit\":\"V\",\"Device_Class\":\"voltage\"},{\"ValueName\":\"gm\",\"Unit\":\"GM\"},{\"ValueName\":\"elapsedtime\",\"Unit\":\"S\"}],\"NotSensors\":[{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100},{\"ValueName\":\"SetTemp\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":17,\"temp_step\":0.5},{\"ValueName\":\"CounterTime\",\"Type\":\"light\",\"Brightness\":240,\"RGB\":false},{\"ValueName\":\"SetTime\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":0,\"temp_step\":0.5,\"mode_state_topic\":true},{\"ValueName\":\"SelectFan\",\"Type\":\"select\",\"options\":[\"Off\",\"Low\",\"Mid\",\"High\"]},{\"ValueName\":\"SelectLock\",\"Type\":\"select\",\"options\":[\"Unlock\",\"Locked\",\"Armed\"]},{\"ValueName\":\"SelectColor\",\"Type\":\"select\",\"options\":[\"Black\",\"White\",\"Red\",\"Green\",\"Blue\",\"Yellow\",\"Orange\",\"Purple\"]}],\"UseDefaultUnit\":true,\"DefaultUnit\":\".\"}",
       "payloadType":"json",
       "x":840,
       "y":340,
@@ -1039,6 +1010,8 @@
       "qos":"2",
       "datatype":"auto",
       "broker":"18ac67d8.ba0268",
+      "nl":false,
+      "rap":false,
       "inputs":0,
       "x":490,
       "y":960,
@@ -1070,8 +1043,8 @@
       "id":"6b853310.6e826c",
       "type":"function",
       "z":"c7a7e5ea.d0e448",
-      "name":"",
-      "func":"var Debug = flow.get(\"Debug\")\nvar InputString = msg.payload\nvar InputTopic = msg.topic\nvar lastSlash = msg.topic.lastIndexOf(\"/\")+1\nvar Command = msg.topic.substring(lastSlash)\nvar Base = msg.topic.substring(1,lastSlash)\nvar Topic = []\nvar Payload = []\nif(Debug)node.warn(\"InputString:\"+InputString+\"\\n Topic:\"+InputTopic+\"\\n Command:\"+Command+\"\\n Base:\"+Base)\nif (Command==\"RGB\"){\n    Values = InputString.split(\",\")\n    for (var AA in Values){\n        var Output={}\n        Output.topic = Base+\"_\"+Command[AA]\n        Output.payload = Values[AA]\n        node.send(Output)\n    }\n    \n}\nif (Command==\"FanMode\"){\n    var Output={}\n    var FanModeSettings = {\n        \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5\n    }\n    for (var AA in FanModeSettings){\n        if (AA==InputString){\n            Output.topic = Base+\"_\"+Command\n            Output.payload = FanModeSettings[AA]\n            break\n        }\n    }    \n \n if (Output.topic != undefined)node.send(Output)\n}",
+      "name":"TransformData (2)",
+      "func":"var Debug = flow.get(\"Debug\")\nvar InputString = msg.payload\nvar InputTopic = msg.topic\nvar lastSlash = msg.topic.lastIndexOf(\"/\")+1\nvar Command = msg.topic.substring(lastSlash)\nvar Base = msg.topic.substring(1,lastSlash)\nvar Topic = []\nvar Payload = []\nif(Debug==2)node.warn(\"InputString:\"+InputString+\"\\n Topic:\"+InputTopic+\"\\n Command:\"+Command+\"\\n Base:\"+Base)\nif (Command==\"RGB\"){\n    Values = InputString.split(\",\")\n    for (var AA in Values){\n        var Output={}\n        Output.topic = Base+\"_\"+Command[AA]\n        Output.payload = Values[AA]\n        node.send(Output)\n    }\n    \n}\nif (Command==\"FanMode\"){\n    var Output={}\n    var FanModeSettings = {\n        \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5\n    }\n    for (var AA in FanModeSettings){\n        if (AA==InputString){\n            Output.topic = Base+\"_\"+Command\n            Output.payload = FanModeSettings[AA]\n            break\n        }\n    }    \n \n if (Output.topic != undefined)node.send(Output)\n}\nif (Command==\"FanModeSet\"){\n    var Output={}\n    var FanModeSettings = {\n        \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5\n    }\n    \n    for (var AA in FanModeSettings){\n        //if(Debug==2)node.warn(\"FanModeSettings[AA]:\"+FanModeSettings[AA]+\"\\n InputString\"+InputString+ \"\\n AA\"+AA)\n        if (FanModeSettings[AA]==InputString){\n            Output.topic = Base+\"_\"+Command\n            Output.payload = AA\n            break\n        }\n    }    \n \n if (Output.topic != undefined)node.send(Output)\n}",
       "outputs":1,
       "noerr":0,
       "initialize":"",
@@ -1079,12 +1052,13 @@
       "libs":[
          
       ],
-      "x":620,
+      "x":650,
       "y":960,
       "wires":[
          [
             "61dc00b3.b4bf",
-            "cbfd5ad0.5c4b38"
+            "cbfd5ad0.5c4b38",
+            "f2798673652facdc"
          ]
       ]
    },
@@ -1305,6 +1279,142 @@
       "y":300,
       "wires":[
          
+      ]
+   },
+   {
+      "id":"f2798673652facdc",
+      "type":"debug",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "active":true,
+      "tosidebar":true,
+      "console":false,
+      "tostatus":false,
+      "complete":"false",
+      "statusVal":"",
+      "statusType":"auto",
+      "x":610,
+      "y":1040,
+      "wires":[
+         
+      ]
+   },
+   {
+      "id":"60a243c2acb987f1",
+      "type":"inject",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":false,
+      "onceDelay":0.1,
+      "topic":"",
+      "payload":"1",
+      "payloadType":"num",
+      "x":1270,
+      "y":240,
+      "wires":[
+         [
+            "e1fe0ffe.531ce"
+         ]
+      ]
+   },
+   {
+      "id":"263ddf5739777c43",
+      "type":"inject",
+      "z":"c7a7e5ea.d0e448",
+      "name":"",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":false,
+      "onceDelay":0.1,
+      "topic":"",
+      "payload":"2",
+      "payloadType":"num",
+      "x":1270,
+      "y":280,
+      "wires":[
+         [
+            "e1fe0ffe.531ce"
+         ]
+      ]
+   },
+   {
+      "id":"67f36f789a938efa",
+      "type":"inject",
+      "z":"c7a7e5ea.d0e448",
+      "name":"Selects example",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":false,
+      "onceDelay":0.1,
+      "topic":"homeassistant/select/Nodered_Select/TempSelectFan/config",
+      "payload":"{\"name\":\"Nodered_Select SelectFan SelectFan\",\"unique_id\":\"Nodered_Select_Temp_Time\",\"device\":{\"ids\":[\"ESP_Nodered_Select\"],\"model\":\"ESPEASY\",\"manufacturer\":\"ESPEASY\",\"name\":\"ESP_Nodered_Select\"},\"command_topic\":\"EE/Nodered_Select/Temp/SelectFan/Set\",\"state_topic\":\"EE/Nodered_Select/Temp/SelectFan\",\"options\":[\"Off\",\"Low\",\"Mid\",\"High\"],\"value_template\":\"{{['Off', 'Low', 'Mid', 'High'][value|int]}}\",\"command_template\":\"{% for List in ['Off', 'Low', 'Mid', 'High'] %}{% if List == value %}{{loop.index0}}{%endif%}{% endfor %}\"}",
+      "payloadType":"json",
+      "x":1340,
+      "y":460,
+      "wires":[
+         [
+            "76c77bfd.d0bce4",
+            "61dc00b3.b4bf"
+         ]
+      ],
+      "info":"Topics:\nEE Out: \nValue name to match: \nEE In:\n\n\n\"command_topic\": \"OEE/Nodered_Select/Temp/SelectFan/Set\",\n\"state_topic\": \"EE/Nodered_Select/Temp/SelectFan\",\n\n\n"
+   },
+   {
+      "id":"32f2844e1d89039d",
+      "type":"inject",
+      "z":"c7a7e5ea.d0e448",
+      "name":"Clear Example Selects",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":false,
+      "onceDelay":0.1,
+      "topic":"homeassistant/select/Nodered_Select/Temp_SelectFan/config",
+      "payload":"{}",
+      "payloadType":"json",
+      "x":1360,
+      "y":500,
+      "wires":[
+         [
+            "61dc00b3.b4bf"
+         ]
       ]
    },
    {
