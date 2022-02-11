@@ -15,12 +15,13 @@ containt 3 different settings arrays:
    1. Valuename is the name of the variable to search for exact match needed  
    2. Unit is the sufix for the sensor to use  
    3. Device_Class is the class in Home assistant that it is. https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class  
-2. "NotSensors" is a Declaration what Value names is not an Senso 
-   1. Valuename part of the name that need to match to be regarded as such device
-   2. Type is the device type to create
+2. "NotSensors" is a Declaration what Value names is not an Sensor 
+   1. ValueName part of the name that need to match to be regarded as such device
+   2. Type is the device type to create in home assistant
    3. Brightness is the max value to output when home assistent is set to 100%
    4. RGB is if it should output RGB or not and give the device controlls for it.
    5. mode_state_topic can be enabled to have a Fanmode setting parameter that can be set
+   6. Options is the Text values to use. in EE it is converted so first option is value 0 secound is 1 and so on.
 3. "UseDefaultUnit" is a setting if the unit is not found if it should use ValueName 
 4. "DefaultUnit" if variable is defined it Replaces ValueName of UseDefaultUnit.
       This is to get around standard behavior that it shows states not as a graph in Home assistant.
