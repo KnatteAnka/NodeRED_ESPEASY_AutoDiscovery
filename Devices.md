@@ -98,6 +98,23 @@ on Import#SetTemp do
  taskrun,devicenr
 endon 
 ```
+## Select (Pre release info)
+Variations of Select in Settings node
+Default variants:
+SelectFan (0ff,Low,Mid,High) SelectLock(Unlock,Locked,Armed) SelectColor(Black,White,Red,Green,Blue,Yellow,Orange,Purple)
+1. Create a dummy device
+2. Set a name of a vale to include any of the select variants
+3. Create MQTT import Device
+4. Set one variable to the same name as in step 2
+5. Set first topic to Dummy devices topic and add /Set
+6. Add below rule for moving value to Dummydevice if needed.
+7. use the sent Value how you see fit use
+```
+on Import#SelectFan do
+ Taskvalueset,devicenr,varNr,%eventvalue%
+ taskrun,devicenr
+endon 
+```
 **MQTT Import**  
 ![MQTT Import](PNG/Termostat_MQTTImport.PNG)  
 **Dummy Device**  
