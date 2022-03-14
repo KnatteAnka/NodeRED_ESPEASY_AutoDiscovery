@@ -13,13 +13,14 @@ if MQTT import is needed to be used then the first MQTT controller needs to have
 # Devices:
 **Always do a restart of EasyESP device after name change or changes to MQTT Controller**
 
-## Sensorer:
+## Sensors:
 You only need to activate the device and set it to use the HA controller:
 
 
 
 ## Switch:
 create a dummy device and set the name of a value to include "Relay" or "Switch" as default  
+Note it have to have 0 decimals
 
 add a new rule with the name Set%tskname% (exampel SetRelay if value is Relay)   
 this rules job is to set the dummydevice and if needed GPIO  
