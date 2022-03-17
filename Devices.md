@@ -45,6 +45,33 @@ on Relay#relay do
 endon
 ```
 
+## Button: (Pre release info)
+
+create a dummy device and set the name of a value to include "Button" as default  
+
+add a new rule with the name Press%tskname% (exampel PressButton if value is Button)   
+this rules job is to set the dummydevice and if needed GPIO  
+Exampel:  
+```
+on PressButton do
+ taskvalueset,3,1,%eventvalue%
+ taskrun,3
+endon
+```
+rule for setting Relay and led of Shelly plug with EE or with button press:
+```
+on Button#State=0 do
+ logentry,Toggeling Relay
+ taskValueSet,3,1,1-[Relay#relay]
+ event,Relay#relay
+endon
+on Button#Button do
+ gpio,15,[Relay#relay]
+ let,1,1-[Relay#relay]
+ gpio,0,%v1%
+endon
+```
+
 ## Dimmer:
 1. Create a dummy device 
 2. Set a name of a value to include "Percent"(0-100) or "Brightness"(0-255)
