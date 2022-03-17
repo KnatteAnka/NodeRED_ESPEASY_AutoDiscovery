@@ -18,8 +18,8 @@ Yes | Dimmer 0-100 | Percent
 Yes | Dimmer 0-255 | Brightness 
 Yes | Dimmer 0-240 | CounterTime
 Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
-Yes | Select | SelectFan, SelectLock, SelectColor
-No | Button
+Beta | Select | SelectFan, SelectLock, SelectColor
+Beta | Button
 No | Number
 
 ## Device list under configuration:
