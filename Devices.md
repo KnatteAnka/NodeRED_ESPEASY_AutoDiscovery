@@ -148,9 +148,9 @@ on Import#SelectFan do
  Taskvalueset,devicenr,varNr,%eventvalue%
  taskrun,devicenr
 endon 
-```
-## Tag (Beta)
-Add any RFID device and verify that name contain Tag
-when tag is scanned it will now appear in
-HA/configuration/Tags
-There you can set name for Tags
+```  
+## Tag (Beta)  
+Add any RFID device and verify that name contain Tag  
+when tag is scanned it will now appear in  
+HA/configuration/Tags  
+There you can set name for Tags  
