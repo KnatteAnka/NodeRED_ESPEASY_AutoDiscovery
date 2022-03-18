@@ -20,7 +20,7 @@ Yes | Dimmer 0-240 | CounterTime
 Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
 Beta | Select | SelectFan, SelectLock, SelectColor, GarrageState
 Beta | Button | Button
-Beta | Tag Scanner | RFID
+Beta | Tag Scanner | Tag
 Beta | Binary Sensor | LockState, MotionState  
 No | Number
 
