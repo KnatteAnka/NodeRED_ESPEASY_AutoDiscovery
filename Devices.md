@@ -45,7 +45,7 @@ on Relay#relay do
 endon
 ```
 
-## Button: (Pre release info)
+## Button: (Beta)
 
 create a dummy device and set the name of a value to include "Button" as default  
 
@@ -131,7 +131,7 @@ endon
 **Dummy Device**  
 ![Dummy Device](PNG/Termostat_DummyDevice.PNG)  
 
-## Select (Pre release info)
+## Select (Beta)
 Variations of Select in Settings node
 Default variants:
 SelectFan (0ff,Low,Mid,High) SelectLock(Unlock,Locked,Armed) SelectColor(Black,White,Red,Green,Blue,Yellow,Orange,Purple)
@@ -149,3 +149,8 @@ on Import#SelectFan do
  taskrun,devicenr
 endon 
 ```
+## Tag (Beta)
+Add any RFID device and verify that name contain Tag
+when tag is scanned it will now appear in
+HA/configuration/Tags
+There you can set name for Tags
