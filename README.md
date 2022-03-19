@@ -5,7 +5,7 @@
 
 * The Flow creates an device on Home assistant according to the name of the variable
 * Enable autodiscovery for EasyEsp without have the code on each device 
-* If a variable starts with "_" then its skipped
+* If a variable in EE starts with "_" then its skipped
 
 * Hint use [MQTT Explorer](http://mqtt-explorer.com/) to debug what is sent to Home Assistant if you have any problem
 
