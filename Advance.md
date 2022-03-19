@@ -21,7 +21,7 @@ containts some different settings arrays and variables:
    3. [Device_Class](https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class)   is the class in Home assistant that it is. 
 3. "Devices" is a Declaration what Value names specific [Device classes](https://www.home-assistant.io/docs/mqtt/discovery/) has.  
   
-   If Value name is not found then it uses default that is Sensor.
+   If Value name is not found then it uses default that is Sensor.  
    if First char in a variable is lowercase then its sent directly to HA if not then its processed before its sent. 
    meaning you can change and add settings by just adding them to a device  
    1. **ValueName** part of the name that need to match to be regarded as such device  
