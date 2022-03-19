@@ -12,6 +12,8 @@ The Node-Red **inject Node Settings**:
 containts some different settings arrays and variables:  
 *Settings inside Function node is if settings is not run or missing!*
 
+![Flow_Node-Red](PNG/Flow_Node-Red_Settings.PNG)
+
 1. "UnitsContainsName" sets if Units Valuename have to be exact match or just contain the word to match.
 2. "Units" is an Array of Sensor settings
    1. Valuename is the name of the variable to search for
@@ -33,7 +35,7 @@ containts some different settings arrays and variables:
 4. "UseDefaultUnit" is a setting if the unit is not found if it should use ValueName   
 5. "DefaultUnit" if variable is defined it Replaces ValueName of UseDefaultUnit.  
       This is to get around standard behavior that it shows states not as a graph in Home assistant.  
-![Flow_Node-Red](PNG/Flow_Node-Red_Settings.PNG)  
+  
 
 # Reset Autodiscovery
 1. in HA Select all Easy Esp devices that you want to recreate and delete them (under configuration and Devices)
