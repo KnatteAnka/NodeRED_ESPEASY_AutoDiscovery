@@ -18,6 +18,7 @@ containts some different settings arrays and variables:
    2. Unit is the sufix for the sensor to use  
    3. Device_Class is the class in Home assistant that it is. https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class  
 3. "Devices" is a Declaration what Value names specific Device classes has.  
+  
    if First char in a variable is lowercase then its sent directly to HA if not then its processed before its sent. 
    meaning you can change and add settings by just adding them to a device  
    1. **ValueName** part of the name that need to match to be regarded as such device  
