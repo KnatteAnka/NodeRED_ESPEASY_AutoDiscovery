@@ -7,7 +7,7 @@
 * Enable autodiscovery for EasyEsp without have the code on each device 
 * If a variable starts with "_" then its skipped
 
-* Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
+* Hint use [MQTT Explorer](http://mqtt-explorer.com/) to debug what is sent to Home Assistant if you have any problem
 
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
