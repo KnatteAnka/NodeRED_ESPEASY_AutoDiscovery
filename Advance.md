@@ -8,7 +8,7 @@
 # AdvanceSettings
 **Flow Node-Red**
 ![Flow_Node-Red](PNG/Flow_Node-Red.PNG)
-The Node-Red **inject Node Settings**:
+The Node-Red **inject Node Settings**:  
 containts some different settings arrays and variables:  
 *Settings inside Function node is if settings is not run or missing!*
 
