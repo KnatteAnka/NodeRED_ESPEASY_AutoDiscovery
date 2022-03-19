@@ -15,7 +15,8 @@ containt 3 different settings arrays:
    1. Valuename is the name of the variable to search for exact match needed  
    2. Unit is the sufix for the sensor to use  
    3. Device_Class is the class in Home assistant that it is. https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class  
-2. "NotSensors" is a Declaration what Value names is not an Sensor 
+2. "Devices" is a Declaration what Value names specific Device classes has.
+   if First char in a variable is lowercase then its sent directly to HA if not then its processed before its sent. 
    1. ValueName part of the name that need to match to be regarded as such device
    2. Type is the device type to create in home assistant
    3. Brightness is the max value to output when home assistent is set to 100%
