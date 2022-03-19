@@ -145,9 +145,14 @@ endon
 ![Dummy Device](PNG/Termostat_DummyDevice.PNG)  
 
 ## Select (Beta)
-Variations of Select in Settings node
-Default variants:
-SelectFan (0ff,Low,Mid,High) SelectLock(Unlock,Locked,Armed) SelectColor(Black,White,Red,Green,Blue,Yellow,Orange,Purple)
+Variations of Select in Settings node  
+Default variants:  
+Valuename|HA Selections  
+-----|------
+SelectFan | 0ff,Low,Mid,High  
+SelectLock | Unlock,Locked,Armed  
+SelectColor | Black,White,Red,Green,Blue,Yellow,Orange,Purple  
+
 1. Create a dummy device
 2. Set a name of a vale to include any of the select variants
 3. Create MQTT import Device
