@@ -11,7 +11,7 @@
 
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
-Yes | Sensors | All other, GarrageList[Device Install](Devices.md)  
+Yes | Sensors | All other, GarrageList [Device Install](Devices.md)  
 Yes | Switch | State,Relay
 Yes | RGB Led | RGBBrightness 
 Yes | Dimmer 0-100 | Percent 
