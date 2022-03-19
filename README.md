@@ -11,18 +11,18 @@
 
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
-Yes | Sensors | All other, GarrageList [Device Install](Devices.md)  
-Yes | Switch | State,Relay
-Yes | RGB Led | RGBBrightness 
-Yes | Dimmer 0-100 | Percent 
-Yes | Dimmer 0-255 | Brightness 
-Yes | Dimmer 0-240 | CounterTime
-Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
-Beta | Select | SelectFan, SelectLock, SelectColor, GarrageState
-Beta | Button | Button
-Beta | Tag Scanner | Tag
-Beta | Binary Sensor | LockSens, MotionSens, MoveSens  
-No | Number
+Yes | [Sensors](https://www.home-assistant.io/integrations/sensor.mqtt/) | All other, GarrageList [Device Install](Devices.md)  
+Yes | [Switch](https://www.home-assistant.io/integrations/switch.mqtt/) | State,Relay
+Yes | [RGB Led](https://www.home-assistant.io/integrations/light.mqtt/) | RGBBrightness 
+Yes | [Dimmer 0-100](https://www.home-assistant.io/integrations/light.mqtt/) | Percent 
+Yes | [Dimmer 0-255](https://www.home-assistant.io/integrations/light.mqtt/) | Brightness 
+Yes | [Dimmer 0-240](https://www.home-assistant.io/integrations/light.mqtt/) | CounterTime
+Yes  | [Termostat](https://www.home-assistant.io/integrations/climate.mqtt/) (temperature output) | SetTemp(17-24), SetTime(0-24)
+Beta | [Select](https://www.home-assistant.io/integrations/select.mqtt/) | SelectFan, SelectLock, SelectColor, GarrageState
+Beta | [Button](https://www.home-assistant.io/integrations/button.mqtt/) | Button
+Beta | [Tag Scanner](https://www.home-assistant.io/integrations/tag.mqtt/) | Tag
+Beta | [Binary Sensor](https://www.home-assistant.io/integrations/binary_sensor.mqtt/) | LockSens, MotionSens, MoveSens  
+No | [Number](https://www.home-assistant.io/integrations/number.mqtt/)
 
 ## Device list under configuration:
 ![HA Device List](PNG/HA_Devices.PNG)
