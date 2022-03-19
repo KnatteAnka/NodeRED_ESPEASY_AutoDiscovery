@@ -9,7 +9,7 @@
 **Flow Node-Red**
 ![Flow_Node-Red](PNG/Flow_Node-Red.PNG)
 The Node-Red **inject Node Settings**:
-containt 3 different settings arrays:  
+containts some different settings arrays and variables:  
 *Settings inside Function node is if settings is not run or missing!*
 
 1. "UnitsContainsName" sets if Units Valuename have to be exact match or just contain the word to match.
