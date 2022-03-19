@@ -18,10 +18,19 @@ if MQTT import is needed to be used then the first MQTT controller needs to have
 You only need to activate the device and set it to use the HA controller:
 
 if custom settings is wanted See [Advance Settings](Advance.md) then how to do it.
+Variable name | HA Shown text | EE State
+--------|---------|-------
+GarrageList | Open / Closed / Car found | 0/1/2
+
 
 ## Binary Sensors:
 Same as Sensors but only some device classes is delcared as default if more is needed see [Advance Settings](Advance.md) 
-
+examples
+Variable name | HA Shown text | EE State
+--------|---------|---------
+LockSens | open (unlocked) / closed (locked) | 1/0
+MotionSens | motion detected / motion (clear) | 1/0
+MoveSens | moving/ not moving (stopped) | 1/0
 ## Switch:
 create a dummy device and set the name of a value to include "Relay" or "Switch" as default  
 Note it have to have 0 decimals
