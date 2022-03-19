@@ -11,7 +11,7 @@
 
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
-Yes | Sensors | All other
+Yes | Sensors | All other, GarrageList[Device Install](Devices.md)  
 Yes | Switch | State,Relay
 Yes | RGB Led | RGBBrightness 
 Yes | Dimmer 0-100 | Percent 
@@ -21,7 +21,7 @@ Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
 Beta | Select | SelectFan, SelectLock, SelectColor, GarrageState
 Beta | Button | Button
 Beta | Tag Scanner | Tag
-Beta | Binary Sensor | LockState, MotionState  
+Beta | Binary Sensor | LockSens, MotionSens, MoveSens  
 No | Number
 
 ## Device list under configuration:
