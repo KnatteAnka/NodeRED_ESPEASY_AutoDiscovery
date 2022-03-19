@@ -17,7 +17,7 @@ containts some different settings arrays and variables:
    1. Valuename is the name of the variable to search for
    2. Unit is the sufix for the sensor to use  
    3. [Device_Class](https://www.home-assistant.io/docs/configuration/customizing-devices/#device-class)   is the class in Home assistant that it is. 
-3. "Devices" is a Declaration what Value names specific Device classes has.  
+3. "Devices" is a Declaration what Value names specific [Device classes](https://www.home-assistant.io/docs/mqtt/discovery/) has.  
   
    if First char in a variable is lowercase then its sent directly to HA if not then its processed before its sent. 
    meaning you can change and add settings by just adding them to a device  
