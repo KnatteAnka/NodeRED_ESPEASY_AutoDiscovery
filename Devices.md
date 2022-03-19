@@ -5,16 +5,19 @@
 
 ---
 
-[Switch](#switch) | [Dimmer](#dimmer) | [RGBDimmer](#rgbdimmer) | [Termostat](#termostat) | [Select](#select-beta) | [Tag](#tag-beta)
+[Sensor](#sensor) | [Binary Sensor](#binary-sensor) | [Switch](#switch) | [Button](#button-beta) | [Dimmer](#dimmer) | [RGBDimmer](#rgbdimmer) | [Termostat](#termostat) | [Select](#select-beta) | [Tag](#tag-beta)
 
+---
 
 **MQTT Import info:**  
 if MQTT import is needed to be used then the first MQTT controller needs to have no username or password and be disabled
 
+
+
 # Devices:
 **Always do a restart of EasyESP device after name change or changes to MQTT Controller**
 
-## Sensors:
+## Sensor:
 You only need to activate the device and set it to use the HA controller:
 
 if custom settings is wanted See [Advance Settings](Advance.md) then how to do it.
@@ -23,7 +26,7 @@ Variable name | HA Shown text | EE State
 GarrageList | Open / Closed / Car found | 0/1/2
 
 
-## Binary Sensors:
+## Binary Sensor:
 Same as Sensors but only some device classes is delcared as default if more is needed see [Advance Settings](Advance.md) 
 examples
 Variable name | HA Shown text | EE State
