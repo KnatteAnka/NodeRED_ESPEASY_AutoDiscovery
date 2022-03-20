@@ -39,7 +39,12 @@ containts some different settings arrays and variables:
       
 When adding devices look at one of the examples to see how they are declared and build from that or start an issue and tell what you want EE to send and HA to show and what typ of device and i may be able to help. See [Home Assistant MQTT Discovery](https://www.home-assistant.io/docs/mqtt/discovery/) for HA supported devices and parameters.
 
-  
+# Edit EasyESP_MQTTDisc.txt
+settings file that is loaded is located in config folder
+
+1. copy file to [JsonFramater](https://jsonformatter.curiousconcept.com/#)
+2. Paste formated data in file
+3. Remove any devices you want to redo
 
 # Reset Autodiscovery
 1. in HA Select all Easy Esp devices that you want to recreate and delete them (under configuration and Devices)
