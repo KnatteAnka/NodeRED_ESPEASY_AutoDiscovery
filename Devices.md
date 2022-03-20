@@ -18,27 +18,36 @@ if MQTT import is needed to be used then the first MQTT controller needs to have
 **Always do a restart of EasyESP device after name change or changes to MQTT Controller**
 
 ## Sensor:
+Variable name | HA Shown text | EE State
+--------|---------|-------
+GarrageList | Open, Closed, Car found | 0-2
+Any non declared| EE value | any  
+
 You only need to activate the device and set it to use the HA controller:
 
 if custom settings is wanted See [Advance Settings](Advance.md) then how to do it.
-Variable name | HA Shown text | EE State
---------|---------|-------
-GarrageList | Open / Closed / Car found | 0/1/2
+
 
 
 ## Binary Sensor:
-Same as Sensors but only some device classes is delcared as default if more is needed see [Advance Settings](Advance.md) 
-examples
 Variable name | HA Shown text | EE State
 --------|---------|---------
 LockSens | open (unlocked) / closed (locked) | 1/0
 MotionSens | motion detected / motion (clear) | 1/0
-MoveSens | moving/ not moving (stopped) | 1/0
+MoveSens | moving/ not moving (stopped) | 1/0  
+
+Same as Sensors but only some device classes is delcared as default if more is needed see [Advance Settings](Advance.md) 
+examples
+
 ## Switch:
-create a dummy device and set the name of a value to include "Relay" or "Switch" as default  
+Variable name | EE State
+--------|---------
+Relay|0/1  
+Switch|0/1  
+1. Create a dummy device and set the name of a value to include one of above Valuenames
 Note it have to have 0 decimals
 
-add a new rule with the name Set%tskname% (exampel SetRelay if value is Relay)   
+2. Add a new rule with the name Set%tskname% (exampel SetRelay if value is Relay)   
 this rules job is to set the dummydevice and if needed GPIO  
 Exampel:  
 ```
@@ -47,7 +56,7 @@ on SetRelay do
  taskrun,3
 endon
 ```
-rule for setting Relay and led of Shelly plug with EE or with button press:
+3. Add rule for setting Relay and led of Shelly plug with EE or with button press:
 ```
 on Button#State=0 do
  logentry,Toggeling Relay
@@ -61,9 +70,13 @@ on Relay#relay do
 endon
 ```
 
-## Button: (Beta)
 
-create a dummy device and set the name of a value to include "Button" as default  
+## Button: (Beta)
+Variable name | EE State
+--------|---------
+Button|0/1  
+
+create a dummy device and set the name of a value to include a Value name from above
 
 add a new rule with the name Press%tskname% (exampel PressButton if value is Button)   
 this rules job is to set the dummydevice and if needed GPIO  
@@ -88,7 +101,14 @@ on Button#Button do
 endon
 ```
 
+
 ## Dimmer:
+Variable name | EE State  
+--------|---------
+Brightness | 0-255  
+Percent | 0-100  
+CounterTime | 0-240  
+
 1. Create a dummy device 
 2. Set a name of a value to include "Percent"(0-100) or "Brightness"(0-255)
 3. Set one more to with prefix "_" example "_Percent" and set it to 0 Decimals
@@ -118,13 +138,24 @@ on Import#State do
  taskrun,2
 endon
 ```
+
 ## RGBDimmer
+Variable name | EE State
+--------|---------
+RGBBrightness| 0-255 + RGB value  
+
 1. Do all 7 Steps from Dimmer but in step 2 set the name to "RGBBrightness"
 2. Add an secound MQTT import device
 3. set the names to "R","G","B" and topic to MQTT topic of RGBBrightness and add "/_R","/_G","/_B"
 
 
 ## Termostat 
+Variable name | EE State | Extra info
+--------|---------
+SetTemp | 17-24 |
+SetTime | 0-24 | 1. HA can reads Fanmode state  
+1. MQTT topic is SetTime topic and "/_FanModeSet"
+
 1. Create a dummy device 
 2. Set a name of a value to include "SetTemp" or "SetTime"  
 (different settings of max and min temp as default  
@@ -147,14 +178,15 @@ endon
 **Dummy Device**  
 ![Dummy Device](PNG/Termostat_DummyDevice.PNG)  
 
+
+
 ## Select (Beta)
-Variations of Select in Settings node  
-Default variants:  
-Valuename|HA Selections  
------|------
-SelectFan | 0ff,Low,Mid,High  
-SelectLock | Unlock,Locked,Armed  
-SelectColor | Black,White,Red,Green,Blue,Yellow,Orange,Purple  
+Variable name | HA Shown text | EE State
+--------|---------|--------
+SelectFan|Off,Low,Mid,High|0-3
+SelectLock|Unlock,Locked,Armed,0-2
+SelectGarrage|Open,Closed,Car found,Car not found| 0-3
+SelectColor|Black,White,Red,Green,Blue,Yellow,Orange,Purple|0-7
 
 1. Create a dummy device
 2. Set a name of a vale to include any of the select variants
@@ -169,9 +201,15 @@ on Import#SelectFan do
  Taskvalueset,devicenr,varNr,%eventvalue%
  taskrun,devicenr
 endon 
-```  
+```
+
+
 ## Tag (Beta)  
+Variable name | EE State
+--------|---------
+Tag| Tag reading
+
 Add any RFID device and verify that name contain Tag  
 when tag is scanned it will now appear in  
 HA/configuration/Tags  
-There you can set name for Tags  
+There you can set name for Tags 
