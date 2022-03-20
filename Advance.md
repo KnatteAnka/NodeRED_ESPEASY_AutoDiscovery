@@ -42,9 +42,10 @@ When adding devices look at one of the examples to see how they are declared and
 # Edit EasyESP_MQTTDisc.txt
 settings file that is loaded is located in config folder
 
-1. copy file to [JsonFramater](https://jsonformatter.curiousconcept.com/#)
-2. Paste formated data in file
+1. copy file content to [JsonFramater](https://jsonformatter.curiousconcept.com/#)
+2. Paste formated content back to the file
 3. Remove any devices you want to redo
+4. Press load button in Node red
 
 # Reset Autodiscovery
 1. in HA Select all Easy Esp devices that you want to recreate and delete them (under configuration and Devices)
