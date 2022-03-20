@@ -18,6 +18,7 @@ if MQTT import is needed to be used then the first MQTT controller needs to have
 **Always do a restart of EasyESP device after name change or changes to MQTT Controller**
 
 ## Sensor:
+[Home Assistant MQTT Sensors](https://www.home-assistant.io/integrations/sensor.mqtt/)
 Variable name | HA Shown text | EE State
 --------|---------|-------
 GarrageList | Open, Closed, Car found | 0-2
@@ -30,16 +31,19 @@ if custom settings is wanted See [Advance Settings](Advance.md) then how to do i
 
 
 ## Binary Sensor:
+[Home Assistant MQTT Binary Sensor](https://www.home-assistant.io/integrations/binary_sensor.mqtt/)
 Variable name | HA Shown text | EE State
 --------|---------|---------
 LockSens | open (unlocked) / closed (locked) | 1/0
 MotionSens | motion detected / motion (clear) | 1/0
 MoveSens | moving/ not moving (stopped) | 1/0  
+TampSens | tampering detected/ no tampering (clear) | 1/0
 
 Same as Sensors but only some device classes is delcared as default if more is needed see [Advance Settings](Advance.md) 
 examples
 
 ## Switch:
+[Home Assistant MQTT Switch](https://www.home-assistant.io/integrations/switch.mqtt/) 
 Variable name | EE State
 --------|---------
 Relay|0/1  
@@ -72,6 +76,7 @@ endon
 
 
 ## Button: (Beta)
+[Home Assistant MQTT Button](https://www.home-assistant.io/integrations/button.mqtt/)
 Variable name | EE State
 --------|---------
 Button|0/1  
@@ -103,6 +108,7 @@ endon
 
 
 ## Dimmer:
+[Home Assistant MQTT Light](https://www.home-assistant.io/integrations/light.mqtt/)
 Variable name | EE State  
 --------|---------
 Brightness | 0-255  
@@ -140,6 +146,7 @@ endon
 ```
 
 ## RGBDimmer
+[Home Assistant MQTT Light](https://www.home-assistant.io/integrations/light.mqtt/)
 Variable name | EE State
 --------|---------
 RGBBrightness| 0-255 + RGB value  
@@ -150,6 +157,7 @@ RGBBrightness| 0-255 + RGB value
 
 
 ## Termostat 
+[Home Assistant MQTT Termostat](https://www.home-assistant.io/integrations/climate.mqtt/)
 Variable name | EE State | Extra info
 --------|---------
 SetTemp | 17-24 |
@@ -181,6 +189,7 @@ endon
 
 
 ## Select (Beta)
+[Home Assistant MQTT Select](https://www.home-assistant.io/integrations/select.mqtt/)
 Variable name | HA Shown text | EE State
 --------|---------|--------
 SelectFan|Off,Low,Mid,High|0-3
@@ -204,7 +213,8 @@ endon
 ```
 
 
-## Tag (Beta)  
+## Tag (Beta)
+[Home Assistant MQTT Tag Scanner](https://www.home-assistant.io/integrations/tag.mqtt/)
 Variable name | EE State
 --------|---------
 Tag| Tag reading
