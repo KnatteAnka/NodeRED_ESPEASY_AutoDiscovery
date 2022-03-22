@@ -157,11 +157,12 @@ RGBBrightness| 0-255 + RGB value
 
 
 ## Termostat 
-[Home Assistant MQTT Termostat](https://www.home-assistant.io/integrations/climate.mqtt/)
-Variable name | EE State | Extra info
---------|---------
+[Home Assistant MQTT Termostat](https://www.home-assistant.io/integrations/climate.mqtt/)  
+Variable name | EE State | Extra info  
+--------|---------|-----
 SetTemp | 17-24 |
-SetTime | 0-24 | 1. HA can reads Fanmode state  
+SetTime | 0-24 | 1. HA will read Fanmode state  
+
 1. MQTT topic is SetTime topic and "/_FanModeSet"
 
 1. Create a dummy device 
