@@ -47,7 +47,7 @@ examples
 Variable name | EE State
 --------|---------
 Relay|0/1  
-Switch|0/1  
+State|0/1  
 1. Create a dummy device and set the name of a value to include one of above Valuenames
 Note it have to have 0 decimals
 
