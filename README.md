@@ -12,14 +12,14 @@
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
 Yes | [Sensors](Devices.md#sensor) | All other, GarrageList
-Beta | [Binary Sensor](Devices.md#binary-sensor) | LockSens, MotionSens, MoveSens, TampSens
+Yes | [Binary Sensor](Devices.md#binary-sensor) | LockSens, MotionSens, MoveSens, TampSens
 Yes | [Switch](Devices.md#switch) | State,Relay
-Beta | [Button](Devices.md#button-beta) | Button
+Yes | [Button](Devices.md#button-beta) | Button
 Yes | [Dimmer](Devices.md#dimmer) | Percent,Brightness,CounterTime 
 Yes | [RGB Led](Devices.md#rgbdimmer) | RGBBrightness 
 Yes  | [Termostat](Devices.md#termostat) (temperature output) | SetTemp, SetTime
-Beta | [Select](Devices.md#select-beta) | SelectFan, SelectLock, SelectColor, SelectGarrage
-Beta | [Tag Scanner](Devices.md#tag-beta) | Tag
+Yes | [Select](Devices.md#select-beta) | SelectFan, SelectLock, SelectColor, SelectGarrage
+Yes | [Tag Scanner](Devices.md#tag-beta) | Tag
 No | Number
 
 ## Device list under configuration:
