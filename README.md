@@ -5,22 +5,22 @@
 
 * The Flow creates an device on Home assistant according to the name of the variable
 * Enable autodiscovery for EasyEsp without have the code on each device 
-* If a variable starts with "_" then its skipped
+* If a variable in EE starts with "_" then its skipped
 
-* Hint use MQTT Explorer to debug what is sent to Home Assistant if you have any problem
+* Hint use [MQTT Explorer](http://mqtt-explorer.com/) to debug what is sent to Home Assistant if you have any problem
 
  **Support** | **devices:** | **ValueNames** 
 --------|---------|---------
-Yes | Sensors | All other
-Yes | Switch | State,Relay
-Yes | RGB Led | RGBBrightness 
-Yes | Dimmer 0-100 | Percent 
-Yes | Dimmer 0-255 | Brightness 
-Yes | Dimmer 0-240 | CounterTime
-Yes  | Termostat temperature output | SetTemp(17-24), SetTime(0-24)
-No | Selects
-No | Buttons
-No | Numbers
+Yes | [Sensors](Devices.md#sensor) | All other, GarrageList
+Beta | [Binary Sensor](Devices.md#binary-sensor) | LockSens, MotionSens, MoveSens, TampSens
+Yes | [Switch](Devices.md#switch) | State,Relay
+Beta | [Button](Devices.md#button-beta) | Button
+Yes | [Dimmer](Devices.md#dimmer) | Percent,Brightness,CounterTime 
+Yes | [RGB Led](Devices.md#rgbdimmer) | RGBBrightness 
+Yes  | [Termostat](Devices.md#termostat) (temperature output) | SetTemp, SetTime
+Beta | [Select](Devices.md#select-beta) | SelectFan, SelectLock, SelectColor, SelectGarrage
+Beta | [Tag Scanner](Devices.md#tag-beta) | Tag
+No | Number
 
 ## Device list under configuration:
 ![HA Device List](PNG/HA_Devices.PNG)

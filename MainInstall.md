@@ -41,4 +41,4 @@ That tells you what part has unsupported characters
 2. do Install Node-Red Flow steps
 3. press Clear list and Save List to redo all devices
 4. Test the Flow 
-5. Combine Inject node Settings if it was changed
+5. Combine Inject node Settings if it was changed by you
