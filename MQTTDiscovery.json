@@ -1,35 +1,57 @@
 [
    {
-      "id":"c7a7e5ea.d0e448",
+      "id":"8d38f026199b1778",
       "type":"tab",
       "label":"MQTT Discovery",
       "disabled":false,
       "info":""
    },
    {
-      "id":"f084428a.9337c",
+      "id":"f1acc70ff23752d7",
+      "type":"group",
+      "z":"8d38f026199b1778",
+      "name":"copy old file to new file and remove old file",
+      "style":{
+         "label":true
+      },
+      "nodes":[
+         "db7f1dafd8e83fe0",
+         "cf74f94c02f799b2",
+         "2e19893352fed439",
+         "81bf2de62563808b",
+         "177c5e9b22b05956"
+      ],
+      "x":14,
+      "y":1199,
+      "w":1012,
+      "h":122
+   },
+   {
+      "id":"889fd35d2be9d8df",
       "type":"mqtt in",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "topic":"EE/#",
       "qos":"2",
       "datatype":"auto",
       "broker":"18ac67d8.ba0268",
+      "nl":false,
+      "rap":false,
       "inputs":0,
       "x":130,
       "y":720,
       "wires":[
          [
-            "e3b57f40.ed83c"
+            "bd08fee3adabdad5"
          ]
       ]
    },
    {
-      "id":"10942935.b68447",
+      "id":"2544b4ab8683a470",
       "type":"file in",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
-      "filename":"/config/EasyESP_MQTTDisc.txt",
+      "filename":"/config/ESPEasy_MQTTDisc.txt",
       "format":"utf8",
       "chunk":false,
       "sendError":false,
@@ -39,14 +61,14 @@
       "y":40,
       "wires":[
          [
-            "32fd2078.63187"
+            "59794eb5294d19da"
          ]
       ]
    },
    {
-      "id":"d2cb1728.e26c68",
+      "id":"bc1c9edf5fa5c641",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":false,
       "tosidebar":true,
@@ -62,9 +84,9 @@
       ]
    },
    {
-      "id":"e2a7fb50.1656e8",
+      "id":"704bebd21c9def80",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Save List",
       "props":[
          {
@@ -82,16 +104,16 @@
       "y":140,
       "wires":[
          [
-            "89aa47c5.370818"
+            "9b0c78a43706d4e5"
          ]
       ]
    },
    {
-      "id":"8eded1f8.44643",
+      "id":"354789c92b22b767",
       "type":"file",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
-      "filename":"/config/EasyESP_MQTTDisc.txt",
+      "filename":"/config/ESPEasy_MQTTDisc.txt",
       "appendNewline":true,
       "createDir":true,
       "overwriteFile":"true",
@@ -100,41 +122,14 @@
       "y":80,
       "wires":[
          [
-            "d2cb1728.e26c68"
+            "bc1c9edf5fa5c641"
          ]
       ]
    },
    {
-      "id":"1b935601.6f77fa",
-      "type":"change",
-      "z":"c7a7e5ea.d0e448",
-      "name":"Waypoin",
-      "rules":[
-         {
-            "t":"set",
-            "p":"payload",
-            "pt":"msg",
-            "to":"payload",
-            "tot":"msg"
-         }
-      ],
-      "action":"",
-      "property":"",
-      "from":"",
-      "to":"",
-      "reg":false,
-      "x":480,
-      "y":760,
-      "wires":[
-         [
-            "38ffc90b.146236"
-         ]
-      ]
-   },
-   {
-      "id":"7d13c4d8.26b26c",
+      "id":"a16390e9cdc4debb",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":true,
       "tosidebar":true,
@@ -151,15 +146,15 @@
       ]
    },
    {
-      "id":"12ae2bf8.72d214",
+      "id":"abe856d975c4f1cd",
       "type":"switch",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "property":"topic",
       "propertyType":"msg",
       "rules":[
          {
-            "t":"eq",
+            "t":"cont",
             "v":"SingelTopic",
             "vt":"flow"
          }
@@ -171,41 +166,42 @@
       "y":920,
       "wires":[
          [
-            "1b935601.6f77fa",
-            "31675fed.b99f7"
+            "82776e074fa34658",
+            "14b54472135e27e3"
          ]
       ]
    },
    {
-      "id":"38ffc90b.146236",
+      "id":"14b54472135e27e3",
       "type":"function",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"MainScript (1,3)",
-      "func":"\nfunction VerifyTextUnicodeCharacters(text)\n{\n    //Check if Text contains any Not allowed Chars \n    //Input: String to test\n    //Output: Array first val is true if all is good secound is the not allowed chars\n    var notSupportArray = [];\n    for (var i = text.length - 1; i >= 0; i--)\n        {\n            var charCode = text.charCodeAt(i);\n            // 0-9 48-57\n            // A-Z 65-90 , 97-122\n            // _ 95\n            if ((charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90) || (charCode == 95) || (charCode >= 97 && charCode <= 122))\n            {\n                \n            }\n            else\n            {\n                notSupportArray.push(charCode);\n            }\n        }\n    \n    if (notSupportArray.length == 0)\n        {\n            return [true,\"\"]\n        }\n    else\n        {\n            return [false,notSupportArray];\n        }\n}\nfunction AddOptions(Values,FoundObject){\n    var Message2 = \"\"\n    // Check if first char is lowercase for each option in Found object \n    // If it is add it to Values list and return the list afterwards\n    for (var FoundOptions in FoundObject){\n        Message2 += \"\\n FoundOptions: \"+FoundOptions \n        var character = FoundOptions.charAt(0);\n        if (!isNaN(character * 1)){\n            // Skip number\n        }else{\n            if (character == character.toUpperCase()) {\n                // Skip Uppercase\n            }\n            if (character == character.toLowerCase()){\n                // its lowercase add it to Values\n                Values[FoundOptions]=FoundObject[FoundOptions]\n                Message2 += '\\t\\t true'\n            }\n        }\n    }\n    \n    for (var ValueOptions in Values){\n        Message2 += \"\\n ValueOptions: \"+ValueOptions    \n    }\n    \n    //node.error(Message2)\n    //Return changed value\n    //return Values\n}\n\nvar InputPayload = msg.topic.split(\"/\")\n//Check if currect amount of \"/\" if not skipp the package\nvar Debug = flow.get(\"Debug\")\nif (InputPayload.length !=4 ){\n    if(Debug==1)node.warn(\"Skipping Topic:\"+msg.topic+\"\\n Payload:\"+msg.payload+\"\\n not correct amount of '/'\") \n    return  \n} \nInputPayload = [InputPayload]\nInputPayload = {\n    Prefix:InputPayload[0][0],\n    Unit:InputPayload[0][1],\n    TaskName:InputPayload[0][2],\n    Value:InputPayload[0][3]\n}\n//--------------------------------------\n// Debug Message header\nvar Message =(\"Recived:\"+\n\"\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n//--------------------------------------\n// Test that only allowed chars is used\nvar Test = [\n    {Test:\"Prefix\", Value:InputPayload.Prefix,   Title:\"Prefix have not allowed chars\"+InputPayload.Prefix},    // Test Prefix\n    {Test:\"Unit\",   Value:InputPayload.Unit,     Title:\"Unit have not allowed chars\"+InputPayload.Unit},            // Test Unit\n    {Test:\"Device\", Value:InputPayload.TaskName, Title:\"Device have not allowed chars\"+InputPayload.TaskName},// Test Device\n    {Test:\"Value\",  Value:InputPayload.Value,    Title:\"Value have not allowed chars\"+InputPayload.Value}         // Test Value\n];\nMessage += \"\\n\\nTest allowed Chars:\"\nvar FoundError = false\nfor (var AB in Test){\n    // Test String in Test[AA].Value\n    // if false send notice with node.send\n    // and break \n  \n    var Result = VerifyTextUnicodeCharacters(Test[AB].Value)\n    Message += \"\\n\"+Test[AB].Test+\":\\t\"\n    if (Result[0]){\n        Message +=\"Allowed\"\n    }else{\n        Message +=\"'\"\n        for (var BB in Result[1]){\n            Message += String.fromCharCode(Result[1][BB])\n        }\n        Message += \"'\"+ \" Not Allowed\"    \n    }\n  if (!Result[0])FoundError=true\n}\n\nif (FoundError){\n    //Found errors send message and break this packet.\n    var NoticeTitle = \"Device Incorrect installed:\"\n    if (InputPayload.Value!=\"LWT\") node.send([null,{payload:{data:{\"title\":NoticeTitle,\"message\":Message}}}])\n\n    throw new Error(Message);\n}\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = false\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nfor (var BC in CurrentList){\n    var FoundPrefix = 4\n    for (var CC in CurrentList[BC]){\n        if (CurrentList[BC][CC]==InputPayload[CC])FoundPrefix -= 1\n    }\n    if (FoundPrefix==0) Found2 = true\n    \n    \n    if (Found2){\n        Message +=\"\\nFound Topic in List at:\"+BB\n        break\n        \n    }    \n}\n\nif (!Found2&&CheckPrefix!=\"_\"){\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"\"\n    //Prepare MQTT message\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,//\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.topic//,\n     //unit_of_measurement : \"\",\n     \n    }\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Devices = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Units = [\n        {\n            \"ValueName\": \"battery\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"battery\"\n        },\n        {\n            \"ValueName\": \"humidity\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"humidity\"\n        },\n        {\n            \"ValueName\": \"temperature\",\n            \"Unit\": \"°C\",\n            \"Device_Class\": \"temperature\"\n        },\n        {\n            \"ValueName\": \"power\",\n            \"Unit\": \"W\",\n            \"Device_Class\": \"power\"\n        },\n        {\n            \"ValueName\": \"pressure\",\n            \"Unit\": \"hPA\",\n            \"Device_Class\": \"pressure\"\n        },\n        {\n            \"ValueName\": \"current\",\n            \"Unit\": \"A\",\n            \"Device_Class\": \"current\"\n        },\n        {\n            \"ValueName\": \"energy\",\n            \"Unit\": \"KWh\",\n            \"Device_Class\": \"energy\"\n        },\n        {\n            \"ValueName\": \"voltage\",\n            \"Unit\": \"V\",\n            \"Device_Class\": \"voltage\"\n        },\n        {\n            \"ValueName\": \"gm\",\n            \"Unit\": \"GM\"\n        }\n    ]\n    //Import settings if variable is declared \n    if (Settings.Devices!=undefined){\n        Devices = Settings.Devices\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n    var FoundObject = {}    \n    for (var AA in Devices){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+Devices[AA][0])\n       if (Devices[AA].ValueName!=undefined&&Devices[AA].Type!=undefined){\n            var CheckSensor = InputPayload.Value.indexOf(Devices[AA].ValueName)\n            //node.warn(\"Testing Check\"+Check+\" For Value:\"+InputPayload.Value +\"Against: \"+Devices[AA].ValueName)\n            //node.warn(\"Check:\"+Check+\" Compare against:\"+InputPayload.Value+\" NotSernsors:\")\n            //node.warn(Devices[AA])\n            if (CheckSensor>-1){\n                //Found that its declared and the set the type\n                FoundObject = Devices[AA]\n                type=Devices[AA].Type\n                \n            }\n       }    \n    }\n     var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n    switch(type) {\n        // --------------------------------------- Light --------------------------------------------------------------------------\n        case \"light\":\n            Message += \"Device is a Light\"\n            //node.warn(\"Check Light:\"+InputPayload.TaskName)\n            \n            Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n            //Values.optimistic = true\n            Values.command_topic = BaseTopic+\"/State\"\n            Values.payload_on = 1.00\n            Values.payload_off = 0.00\n            if (FoundObject.Brightness==undefined) Values.brightness_scale=100\n            else Values.brightness_scale = FoundObject.Brightness\n            Values.brightness_state_topic =BaseTopic\n            Values.brightness_command_topic = BaseTopic+\"/Set\"\n            var SetRGB=false\n            if(FoundObject.RGB!=undefined) SetRGB=FoundObject.RGB\n            if (SetRGB){\n                Values.optimistic = true\n                Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n                \n            }\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Switch --------------------------------------------------------------------------    \n        case \"switch\":\n            Message += \"Device is a Switch\"\n            Values.state_off = 0\n            Values.state_on = 1\n            Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n            Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n            Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Switch --------------------------------------------------------------------------        \n        case \"button\":    \n            delete Values['state_topic'] //no state_topic for button\n            Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n            Values.payload_press = \"event,Press\"+InputPayload.Value\n            AddOptions(Values,FoundObject)\n            break;    \n        // --------------------------------------- Climate --------------------------------------------------------------------------    \n        case \"climate\":\n            Message += \"Device is a climate\"\n            delete Values['state_topic']\n            \n            /*if (FoundObject.max_temp!=undefined) Values.max_temp = FoundObject.max_temp\n            if (FoundObject.min_temp!=undefined) Values.min_temp = FoundObject.min_temp\n            if (FoundObject.temp_step!=undefined) Values.temp_step = FoundObject.temp_step*/\n            if (FoundObject.Mode_state_topic!=undefined)Values.mode_state_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_FanModeSet\"\n            Values.temperature_command_topic = BaseTopic+\"/Set\"\n            Values.current_temperature_topic = BaseTopic\n            Values.mode_command_topic =  \"O\"+BaseTopic+\"/FanMode\"\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Select --------------------------------------------------------------------------    \n        case \"select\":\n            Message += \"Device is a select\"\n            \n            Values.command_topic = BaseTopic+\"/Set\"\n            Values.options = FoundObject.options\n            \n            Values.value_template = \"{{['\"\n            Values.command_template = \"{% for List in ['\"\n            var LastEntry = Values.options.length-1\n            for (var i in Values.options) {\n                Values.value_template += Values.options[i]\n                Values.command_template +=Values.options[i]\n                if (i != LastEntry){\n                    Values.value_template+=\"', '\"\n                    Values.command_template+=\"', '\"\n                }\n            }\n            Values.value_template += \"'][value|int]}}\"\n            Values.command_template += \"'] %}{% if List == value %}{{loop.index0}}{%endif%}{% endfor %}\"\n            AddOptions(Values,FoundObject)\n            break;\n        case \"tag\": \n            Message += \"Device is a Tag\"\n            delete Values['state_topic']\n            Values.topic = BaseTopic\n            AddOptions(Values,FoundObject)\n            break;\n        case \"binary_sensor\":    \n        case \"sensor\":    \n            var Found = false\n            Message += \"Device is a Sensor\"\n            for (var AC in Units){\n                var Check = Units[AC].ValueName==Test_type\n                var Check2 = false;\n                if (Settings.UnitsContainsName!=undefined&!Check){\n                    if(Settings.UnitsContainsName){\n                        Check2 = Test_type.indexOf(Units[AC].ValueName)\n                        if (Check2 >-1)Check = true\n                    }\n                }\n                //node.warn(\"Testing Check2: \"+Check2+\" For Value: \"+Units[AA].ValueName +\" Against: \"+Test_type)\n                if (Check){\n                    if (Units[AC].Device_Class!=undefined){\n                        Values.device_class=Units[AC].Device_Class\n                    }    \n                    Found=true\n                    Values.unit_of_measurement=Units[AC].Unit\n                }    \n            }\n            if(Debug==1)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n            if (!Found){\n                if (Settings.UseDefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value\n                }\n                else if (Settings.UseDefaultUnit==true){\n                  //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n                  if (Settings.DefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value  \n                  }else{\n                    Values.unit_of_measurement = Settings.DefaultUnit  \n                  }\n                } \n            }\n            // Add custom parameter: to set List of options to display\n            if (FoundObject.List!=undefined){\n                Values.value_template = \"{{['\"\n                var LastEntry = FoundObject.List.length-1\n                for (var i in FoundObject.List) {\n                    Values.value_template += FoundObject.List[i]\n                    \n                    if (i != LastEntry){\n                        Values.value_template+=\"', '\"\n                        \n                    }\n                }\n                Values.value_template += \"'][value|int]}}\"\n            }\n            AddOptions(Values,FoundObject)\n            break;\n        default: \n        // its a Sensor or undeclared type\n            type = \"sensor\"\n            var Found = false\n            Message += \"\\n Device is not found, Sett as a Sensor\"\n            \n            for (var AC in Units){\n                var Check = Units[AC].ValueName==Test_type\n                var Check2 = false;\n                if (Settings.UnitsContainsName!=undefined&!Check){\n                    if(Settings.UnitsContainsName){\n                        Check2 = Test_type.indexOf(Units[AC].ValueName)\n                        if (Check2 >-1)Check = true\n                    }\n                }\n                //node.warn(\"Testing Check2: \"+Check2+\" For Value: \"+Units[AA].ValueName +\" Against: \"+Test_type)\n                if (Check){\n                    if (Units[AC].Device_Class!=undefined){\n                        Values.device_class=Units[AC].Device_Class\n                    }    \n                    Found=true\n                    Values.unit_of_measurement=Units[AC].Unit\n                }    \n            }\n            \n            //if(Debug==1)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n            if (!Found){\n                if (Settings.UseDefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value\n                }\n                else if (Settings.UseDefaultUnit==true){\n                  //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n                  if (Settings.DefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value  \n                  }else{\n                    Values.unit_of_measurement = Settings.DefaultUnit  \n                  }\n                } \n            }\n    }\n    \n    \n    \n    \n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    Values.unique_id= type+\".\"+Values.unique_id\n    Values.unique_id= Values.unique_id.toLowerCase()\n    Message += \"\\n\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    if (Values.device_class!=undefined)Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n    if(Debug==3)node.warn(Message)\n}\nflow.set(\"List\",CurrentList)\nif(Debug==1)node.warn(Message)\n",
+      "func":"var Debug = flow.get(\"Debug\")\nvar InputPayload = GetInputValues(msg,Debug) \n\n//Check if currect amount of \"/\" if not skipp the package\n\n\nif (InputPayload.Error){\n    return  \n} \n\n//--------------------------------------\n// Debug Message header\nvar Message =(\"Recived:\"+\n\"\\nEE:\\t\" + InputPayload.Prefix+\n\"\\nUnit:\\t\"+ InputPayload.Unit+\n\"\\nDevice:\\t\"+ InputPayload.TaskName+\n\"\\nValue:\\t\"+ InputPayload.Value\n);\n\n//Load NamePrefix\nvar NamePrefix = flow.get(\"NamePrefix\");\nif (NamePrefix==undefined )NamePrefix=\"\";\n\n//Load OutputMQTT\nvar OutputMQTT = flow.get(\"OutputMQTT\");\nif (OutputMQTT==undefined )OutputMQTT=\"homeassistant\";\n\n//Load Settings\nvar Settings = flow.get(\"Settings\");\nif (Settings==undefined )Settings={};\n\n//node.warn(Message)\nvar CurrentList = flow.get(\"List\");\nif (CurrentList==undefined )CurrentList=[];\nif ( CurrentList==\"\")CurrentList=[];\nvar Found2 = CheckList(CurrentList, InputPayload)\nvar Message2 = \"Checking: \"\nvar CheckPrefix = InputPayload.Value.substring(0,1)\nif (Found2[0]){\n    Message +=\"\\nFound Topic in List at:\"+Found2[1]\n}    \n\n//node.error(Message2);\nif (!Found2[0]&&CheckPrefix!=\"_\"){\n    //--------------------------------------\n    // Test that only allowed chars is used\n    var Test = [\n        { Test: \"Prefix\", Value: InputPayload.Prefix, Title: \"Prefix have not allowed chars\" + InputPayload.Prefix },    // Test Prefix\n        { Test: \"Unit\", Value: InputPayload.Unit, Title: \"Unit have not allowed chars\" + InputPayload.Unit },            // Test Unit\n        { Test: \"Device\", Value: InputPayload.TaskName, Title: \"Device have not allowed chars\" + InputPayload.TaskName },// Test Device\n        { Test: \"Value\", Value: InputPayload.Value, Title: \"Value have not allowed chars\" + InputPayload.Value }         // Test Value\n    ];\n    Message += \"\\n\\nTest allowed Chars:\"\n    var FoundError = false\n    for (var AB in Test) {\n        // Test String in Test[AA].Value\n        // if false send notice with node.send\n        // and break \n\n        var Result = VerifyTextUnicodeCharacters(Test[AB].Value)\n        Message += \"\\n\" + Test[AB].Test + \":\\t\"\n        if (Result[0]) {\n            Message += \"Allowed\"\n        } else {\n            Message += \"'\"\n            // @ts-ignore\n            for (var BB in Result[1]) {\n                Message += String.fromCharCode(Result[1][BB])\n            }\n            Message += \"'\" + \" Not Allowed\"\n        }\n        if (!Result[0]) FoundError = true\n    }\n\n    if (FoundError) {\n        //Found errors send message and break this packet.\n        var NoticeTitle = \"Device Incorrect installed:\"\n        if (InputPayload.Value != \"LWT\") node.send([null, { payload: { data: { \"title\": NoticeTitle, \"message\": Message } } }])\n\n        throw new Error(Message);\n    }\n\n\n    var Test_type = InputPayload.Value.toLowerCase()\n    \n    var type = \"\"\n    //Prepare MQTT message\n    var Values = {   \n     name : InputPayload.Unit+\" \"+InputPayload.TaskName+\" \"+InputPayload.Value,//\n     unique_id : InputPayload.Unit+\"_\"+InputPayload.TaskName+\"_\"+InputPayload.Value,\n     device:{\n        ids : [NamePrefix+InputPayload.Unit],\n        model : \"ESPEASY\",\n        manufacturer : \"ESPEASY\",\n        name : NamePrefix+InputPayload.Unit\n        \n     },\n     state_topic : msg.topic//,\n     //unit_of_measurement : \"\",\n     \n    }\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Devices = [\n        {\n            ValueName: \"State\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Relay\",\n            Type: \"switch\"\n        },\n        {\n            ValueName: \"Brightness\",\n            Type: \"light\",\n            Brightness: 255,\n            RGB: true\n        },\n        {\n            \"ValueName\": \"Percent\",\n            \"Type\": \"light\",\n            \"Brightness\": 100\n        }\n    ]\n    // This is default settings if Settings node is not found!\n    // Do not use !!!\n    var Units = [\n        {\n            \"ValueName\": \"battery\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"battery\"\n        },\n        {\n            \"ValueName\": \"humidity\",\n            \"Unit\": \"%\",\n            \"Device_Class\": \"humidity\"\n        },\n        {\n            \"ValueName\": \"temperature\",\n            \"Unit\": \"°C\",\n            \"Device_Class\": \"temperature\"\n        },\n        {\n            \"ValueName\": \"power\",\n            \"Unit\": \"W\",\n            \"Device_Class\": \"power\"\n        },\n        {\n            \"ValueName\": \"pressure\",\n            \"Unit\": \"hPA\",\n            \"Device_Class\": \"pressure\"\n        },\n        {\n            \"ValueName\": \"current\",\n            \"Unit\": \"A\",\n            \"Device_Class\": \"current\"\n        },\n        {\n            \"ValueName\": \"energy\",\n            \"Unit\": \"KWh\",\n            \"Device_Class\": \"energy\"\n        },\n        {\n            \"ValueName\": \"voltage\",\n            \"Unit\": \"V\",\n            \"Device_Class\": \"voltage\"\n        },\n        {\n            \"ValueName\": \"gm\",\n            \"Unit\": \"GM\"\n        }\n    ]\n    //Import settings if variable is declared \n    if (Settings.Devices!=undefined){\n        Devices = Settings.Devices\n    }    \n    if (Settings.Units!=undefined){\n        Units = Settings.Units\n    }\n    var FoundObject = {}    \n    for (var AA in Devices){\n       //loop all name alternetivs against the list of known variable names\n       //Set to that type of device if found\n       //else its a sensor and only input device\n       //node.warn(\"Check if:\"+InputPayload.Value+\"==\"+Devices[AA][0])\n       if (Devices[AA].ValueName!=undefined&&Devices[AA].Type!=undefined){\n            var CheckSensor = InputPayload.Value.indexOf(Devices[AA].ValueName)\n           //node.warn(\"Testing Check \" + CheckSensor +\" For Value:\"+InputPayload.Value +\"Against: \"+Devices[AA].ValueName)\n           //node.warn(\"Check: \" + CheckSensor +\" Compare against:\"+InputPayload.Value+\" NotSernsors:\")\n            //node.warn(Devices[AA])\n            if (CheckSensor>-1){\n                //Found that its declared and the set the type\n                FoundObject = Devices[AA]\n                type=Devices[AA].Type\n                \n            }\n       }    \n    }\n     var BaseTopic =  InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/\"+InputPayload.Value\n    switch(type) {\n        // --------------------------------------- Light --------------------------------------------------------------------------\n        case \"light\":\n            Message += \"\\nDevice is a Light\"\n            //node.warn(\"Check Light:\"+InputPayload.TaskName)\n            \n            Values.state_topic =InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_\"+InputPayload.Value\n            //Values.optimistic = true\n            Values.command_topic = BaseTopic+\"/State\"\n            Values.payload_on = 1.00\n            Values.payload_off = 0.00\n            if (FoundObject.Brightness==undefined) Values.brightness_scale=100\n            else Values.brightness_scale = FoundObject.Brightness\n            Values.brightness_state_topic =BaseTopic\n            Values.brightness_command_topic = BaseTopic+\"/Set\"\n            var SetRGB=false\n            if(FoundObject.RGB!=undefined) SetRGB=FoundObject.RGB\n            if (SetRGB){\n                Values.optimistic = true\n                Values.rgb_command_topic =  \"O\"+BaseTopic+\"/RGB\"  \n                \n            }\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Switch --------------------------------------------------------------------------    \n        case \"switch\":\n            Message += \"\\nDevice is a Switch\"\n            Values.state_off = 0\n            Values.state_on = 1\n            Values.payload_on =     \"event,Set\"+InputPayload.Value+\"=1\"\n            Values.payload_off =    \"event,Set\"+InputPayload.Value+\"=0\"\n            Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Switch --------------------------------------------------------------------------        \n        case \"button\":    \n            delete Values['state_topic'] //no state_topic for button\n            Values.command_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/cmd\"\n            Values.payload_press = \"event,Press\"+InputPayload.Value\n            AddOptions(Values,FoundObject)\n            break;    \n        // --------------------------------------- Climate --------------------------------------------------------------------------    \n        case \"climate\":\n            Message += \"\\nDevice is a climate\"\n            delete Values['state_topic']\n            \n            /*if (FoundObject.max_temp!=undefined) Values.max_temp = FoundObject.max_temp\n            if (FoundObject.min_temp!=undefined) Values.min_temp = FoundObject.min_temp\n            if (FoundObject.temp_step!=undefined) Values.temp_step = FoundObject.temp_step*/\n            if (FoundObject.Mode_state_topic!=undefined)Values.mode_state_topic = InputPayload.Prefix+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"/_FanModeSet\"\n            Values.temperature_command_topic = BaseTopic+\"/Set\"\n            Values.current_temperature_topic = BaseTopic\n            Values.mode_command_topic =  \"O\"+BaseTopic+\"/FanMode\"\n            AddOptions(Values,FoundObject)\n            break;\n        // --------------------------------------- Select --------------------------------------------------------------------------    \n        case \"select\":\n            Message += \"\\nDevice is a select\"\n            \n            Values.command_topic = BaseTopic+\"/Set\"\n            Values.options = FoundObject.options\n            \n            Values.value_template = \"{{['\"\n            Values.command_template = \"{% for List in ['\"\n            var LastEntry = Values.options.length-1\n            for (var i in Values.options) {\n                Values.value_template += Values.options[i]\n                Values.command_template +=Values.options[i]\n                if (parseInt(i) != LastEntry){\n                    Values.value_template+=\", \"\n                    Values.command_template+=\", \"\n                }\n            }\n            Values.value_template += \"][value|int]}}\"\n            Values.command_template += \"'] %}{% if List == value %}{{loop.index0}}{%endif%}{% endfor %}\"\n            AddOptions(Values,FoundObject)\n            break;\n        case \"tag\": \n            Message += \"\\nDevice is a Tag\"\n            delete Values['state_topic']\n            Values.topic = BaseTopic\n            AddOptions(Values,FoundObject)\n            break;\n        case \"binary_sensor\":    \n        case \"sensor\":    \n            var Found = false\n            Message += \"\\nDevice is a Sensor\"\n            for (var AC in Units){\n                var Check = Units[AC].ValueName==Test_type\n                var Check2 = -1;\n                if (Settings.UnitsContainsName!=undefined&&!Check){\n                    if(Settings.UnitsContainsName){\n                        Check2 = Test_type.indexOf(Units[AC].ValueName)\n                        if (Check2 >-1)Check = true\n                    }\n                }\n                //node.warn(\"Testing Check2: \"+Check2+\" For Value: \"+Units[AA].ValueName +\" Against: \"+Test_type)\n                if (Check){\n                    if (Units[AC].Device_Class!=undefined){\n                        Values.device_class=Units[AC].Device_Class\n                    }    \n                    Found=true\n                    Values.unit_of_measurement=Units[AC].Unit\n                    \n                }    \n            }\n            if(Debug==1)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n            if (!Found){\n                if (Settings.UseDefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value\n                    \n                }\n                else if (Settings.UseDefaultUnit==true){\n                  //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n                  if (Settings.DefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value  \n                      \n                  }else{\n                    Values.unit_of_measurement = Settings.DefaultUnit  \n                      \n                  }\n                } \n            }\n            // Add custom parameter: to set List of options to display\n            if (FoundObject.List!=undefined){\n                Values.value_template = \"{{['\"\n                var LastEntry = FoundObject.List.length-1\n                for (var i in FoundObject.List) {\n                    Values.value_template += FoundObject.List[i]\n                    \n                    if (parseInt(i) != LastEntry){\n                        Values.value_template+=\"','\"\n                        \n                    }\n                }\n                Values.value_template += \"'][value|int]}}\"\n            }\n            AddOptions(Values,FoundObject)\n            if (FoundObject.RemoveUnit !=undefined){\n                if (FoundObject.RemoveUnit) delete Values.unit_of_measurement\n            }\n            break;\n        default: \n        // its a Sensor or undeclared type\n            type = \"sensor\"\n            var Found = false\n            Message += \"\\n Device is not found, Sett as a Sensor\"\n            \n            for (var AC in Units){\n                var Check = Units[AC].ValueName==Test_type\n                var Check2 = -1;\n                if (Settings.UnitsContainsName!=undefined&&!Check){\n                    if(Settings.UnitsContainsName){\n                        Check2 = Test_type.indexOf(Units[AC].ValueName)\n                        if (Check2 >-1)Check = true\n                    }\n                }\n                //node.warn(\"Testing Check2: \"+Check2+\" For Value: \"+Units[AA].ValueName +\" Against: \"+Test_type)\n                if (Check){\n                    if (Units[AC].Device_Class!=undefined){\n                        Values.device_class=Units[AC].Device_Class\n                    }    \n                    Found=true\n                    Values.unit_of_measurement=Units[AC].Unit\n                    \n                }    \n            }\n            \n            //if(Debug==1)node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n            if (!Found){\n                if (Settings.UseDefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value\n                    \n                }\n                else if (Settings.UseDefaultUnit==true){\n                  //node.error(\"Setting unit_measurment:\"+Settings.UseDefaultUnit+\"\\n Found:\"+Found+\"\\n Test_type:\"+Test_type) \n                  if (Settings.DefaultUnit==undefined){\n                    Values.unit_of_measurement = InputPayload.Value\n                      \n                  }else{\n                    Values.unit_of_measurement = Settings.DefaultUnit  \n                      \n                  }\n                } \n            }\n\n    }\n    \n    if (FoundObject.RemoveUnit != undefined) {\n        if (FoundObject.RemoveUnit) delete Values.unit_of_measurement\n    }\n    \n    \n    \n    var Topic = OutputMQTT+\"/\"+type+\"/\"+InputPayload.Unit+\"/\"+InputPayload.TaskName+\"_\"+InputPayload.Value+\"/config\"\n    \n    Values.unique_id= type+\".\"+Values.unique_id\n    Values.unique_id= Values.unique_id.toLowerCase()\n    Message += \"\\n\\nValues:\"\n    Message += \"\\n type:\"+type\n    Message += \"\\n name:\"+Values.name\n    Message += \"\\n unique_id:\"+Values.unique_id\n    if (Values.device_class!=undefined)Message += \"\\n device_class:\"+Values.device_class\n    Message += \"\\n state_topic:\"+Values.state_topic\n    Message += \"\\n unit_of_measurement:\"+Values.unit_of_measurement\n    Message += \"\\n ids:\"+Values.ids\n    Message += \"\\n devname:\"+Values.devname\n    CurrentList.push(InputPayload)\n    node.send( {\"payload\":Values,\"topic\":Topic})\n    if(Debug==3)node.warn(Message)\n}\nflow.set(\"List\",CurrentList)\nif(Debug==1)node.warn(Message)\n\nfunction VerifyTextUnicodeCharacters(text)\n{\n    //Check if Text contains any Not allowed Chars \n    //Input: String to test\n    //Output: Array first val is true if all is good secound is the not allowed chars\n    var notSupportArray = [];\n    for (var i = text.length - 1; i >= 0; i--)\n        {\n            var charCode = text.charCodeAt(i);\n            // 0-9 48-57\n            // A-Z 65-90 , 97-122\n            // _ 95\n            if ((charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90) || (charCode == 95) || (charCode >= 97 && charCode <= 122))\n            {\n                \n            }\n            else\n            {\n                notSupportArray.push(charCode);\n            }\n        }\n    \n    if (notSupportArray.length == 0)\n        {\n            return [true,\"\"]\n        }\n    else\n        {\n            return [false,notSupportArray];\n        }\n}\nfunction OnlyLowercase(str) {\n    return /^[a-z]*$/.test(str);\n}\nfunction AddOptions(Values,FoundObject){\n    var Message2 = \"\"\n    // Check if first char is lowercase for each option in Found object \n    // If it is add it to Values list and return the list afterwards\n    for (var FoundOptions in FoundObject){\n        Message2 += \"\\n FoundOptions: \"+FoundOptions \n        var Acharacter = FoundOptions.charAt(0);\n        if (OnlyLowercase(Acharacter)){\n                // its lowercase add it to Values\n                Values[FoundOptions]=FoundObject[FoundOptions]\n                Message2 += '\\t\\t true'\n        }\n    }\n    \n    for (var ValueOptions in Values){\n        Message2 += \"\\n ValueOptions: \"+ValueOptions    \n    }\n    \n    //node.warn(Message2)\n    //Return changed value\n    //return Values\n}\nfunction GetInputValues(Input, Debug){\n    var InputArray = Input.topic.split(\"/\")\n    \n    if (InputArray.length !=4){\n        if (Debug == 1) node.warn(\"Skipping Topic:\" + Input.topic + \"\\n Payload:\" + Input.payload + \"\\n not correct amount of '/'\") \n        return {Error:true}\n    }\n\n    var InputPayload = {\n        Prefix: InputArray[0],\n        Unit:InputArray[1],\n        TaskName: InputArray[2],\n        Value: InputArray[3],\n        Error: false\n    }\n    return InputPayload\n}\nfunction CheckList(CurrentList, InputPayload) {\n    /*var InputPayload = {\n        Prefix: InputArray[0],\n        Unit: InputArray[1],\n        TaskName: InputArray[2],\n        Value: InputArray[3],\n        Error: false\n    }*/\n    var Found2 = false\n    for (var LoopList in CurrentList) {\n\n        if (CurrentList[LoopList].Prefix != InputPayload.Prefix) continue\n        if (CurrentList[LoopList].Unit != InputPayload.Unit) continue\n\n        //Message += \"\\n Pre2:\" + CurrentList[LoopList].Prefix + \" =? \" + InputPayload.Prefix\n        //Message += \"| Unit:\" + CurrentList[LoopList].Unit + \" =? \" + InputPayload.Unit\n        //Message += \"| Task:\" + CurrentList[LoopList].TaskName + \" =? \" + InputPayload.TaskName\n        //Message += \"| Val:\" + CurrentList[LoopList].Value + \" =? \" + InputPayload.Value\n\n        if (CurrentList[LoopList].TaskName != InputPayload.TaskName) continue\n        if (CurrentList[LoopList].Value != InputPayload.Value) continue\n        Found2 = true\n        break\n    }\n\n    //node.error(Message)\n    return [Found2, LoopList]\n}",
       "outputs":2,
+      "timeout":"",
       "noerr":0,
       "initialize":"",
       "finalize":"",
       "libs":[
          
       ],
-      "x":840,
-      "y":780,
+      "x":600,
+      "y":760,
       "wires":[
          [
-            "61dc00b3.b4bf",
-            "7d13c4d8.26b26c"
+            "0849bf5836af6dca",
+            "a16390e9cdc4debb"
          ],
          [
-            "8cfbb7f6.89f268",
-            "1ccf5897.d9e477"
+            "905ed9b03097cf2a",
+            "99c14b6e6feebef4"
          ]
       ]
    },
    {
-      "id":"8599bbaf.213778",
+      "id":"e302e339f42330e3",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Load List",
       "props":[
          {
@@ -227,14 +223,14 @@
       "y":60,
       "wires":[
          [
-            "10942935.b68447"
+            "2544b4ab8683a470"
          ]
       ]
    },
    {
-      "id":"2401637c.25954c",
+      "id":"879001ff99c4ac57",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Load Settings",
       "info":"",
       "x":330,
@@ -244,9 +240,9 @@
       ]
    },
    {
-      "id":"d8b023b3.f5f1e",
+      "id":"a8c097ec4190784f",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Save Settings",
       "info":"",
       "x":330,
@@ -256,9 +252,9 @@
       ]
    },
    {
-      "id":"a1cb02f6.eb306",
+      "id":"f7b58e385e478827",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Main Flow",
       "info":"",
       "x":140,
@@ -268,9 +264,9 @@
       ]
    },
    {
-      "id":"6d3d037.bac3bfc",
+      "id":"9ae86df0c1d6f245",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "props":[
          {
@@ -283,7 +279,7 @@
       ],
       "repeat":"",
       "crontab":"",
-      "once":true,
+      "once":false,
       "onceDelay":0.1,
       "topic":"",
       "payload":"All",
@@ -292,14 +288,14 @@
       "y":40,
       "wires":[
          [
-            "5f738a1d.0a39f4"
+            "fe7f8683d1e7cd71"
          ]
       ]
    },
    {
-      "id":"8d038711.4d3c28",
+      "id":"1360e211112ce190",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "props":[
          {
@@ -321,14 +317,14 @@
       "y":80,
       "wires":[
          [
-            "5f738a1d.0a39f4"
+            "fe7f8683d1e7cd71"
          ]
       ]
    },
    {
-      "id":"5f738a1d.0a39f4",
+      "id":"fe7f8683d1e7cd71",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -353,9 +349,9 @@
       ]
    },
    {
-      "id":"e3b57f40.ed83c",
+      "id":"bd08fee3adabdad5",
       "type":"switch",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "property":"InputEnabled",
       "propertyType":"flow",
@@ -371,7 +367,7 @@
             "vt":"str"
          },
          {
-            "t":"false"
+            "t":"else"
          }
       ],
       "checkall":"true",
@@ -381,10 +377,10 @@
       "y":840,
       "wires":[
          [
-            "e9b79ec3.be8f9"
+            "26e37009563a7006"
          ],
          [
-            "12ae2bf8.72d214"
+            "abe856d975c4f1cd"
          ],
          [
             
@@ -392,9 +388,9 @@
       ]
    },
    {
-      "id":"3585d5c5.d070ba",
+      "id":"1a95e8e40f825de5",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "props":[
          {
@@ -412,14 +408,14 @@
       "y":120,
       "wires":[
          [
-            "5f738a1d.0a39f4"
+            "fe7f8683d1e7cd71"
          ]
       ]
    },
    {
-      "id":"e1fe0ffe.531ce",
+      "id":"9fac68efc5f38d26",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -444,9 +440,9 @@
       ]
    },
    {
-      "id":"8e1e2ca7.4581a",
+      "id":"27251aec88eeac66",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Debug Off",
       "props":[
          {
@@ -468,14 +464,14 @@
       "y":360,
       "wires":[
          [
-            "e1fe0ffe.531ce"
+            "9fac68efc5f38d26"
          ]
       ]
    },
    {
-      "id":"4b11e5af.69564c",
+      "id":"da34ed6ccdcfbfa6",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Sensor example",
       "props":[
          {
@@ -497,15 +493,15 @@
       "y":620,
       "wires":[
          [
-            "61dc00b3.b4bf",
-            "76c77bfd.d0bce4"
+            "0849bf5836af6dca",
+            "e7ee6c4d2c4f62c9"
          ]
       ]
    },
    {
-      "id":"61dc00b3.b4bf",
+      "id":"0849bf5836af6dca",
       "type":"mqtt out",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "topic":"",
       "qos":"",
@@ -518,9 +514,9 @@
       ]
    },
    {
-      "id":"69a93b8d.dbe564",
+      "id":"828ef1b509707461",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Clear Example sensor",
       "props":[
          {
@@ -542,14 +538,14 @@
       "y":660,
       "wires":[
          [
-            "61dc00b3.b4bf"
+            "0849bf5836af6dca"
          ]
       ]
    },
    {
-      "id":"46723d78.be2ee4",
+      "id":"d5aa238dbb1483a1",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "props":[
          {
@@ -571,14 +567,14 @@
       "y":220,
       "wires":[
          [
-            "80c698db.01a5c8"
+            "26f41172f2cc403a"
          ]
       ]
    },
    {
-      "id":"80c698db.01a5c8",
+      "id":"26f41172f2cc403a",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -603,9 +599,9 @@
       ]
    },
    {
-      "id":"580263.4b1c9d9c",
+      "id":"baa3933d5c4fa67f",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -630,9 +626,9 @@
       ]
    },
    {
-      "id":"253111b7.66b2ce",
+      "id":"c4f0d785b75c8b1d",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Clear List",
       "props":[
          {
@@ -654,14 +650,14 @@
       "y":180,
       "wires":[
          [
-            "580263.4b1c9d9c"
+            "baa3933d5c4fa67f"
          ]
       ]
    },
    {
-      "id":"76c77bfd.d0bce4",
+      "id":"e7ee6c4d2c4f62c9",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":true,
       "tosidebar":true,
@@ -677,9 +673,9 @@
       ]
    },
    {
-      "id":"31675fed.b99f7",
+      "id":"82776e074fa34658",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":true,
       "tosidebar":true,
@@ -689,16 +685,16 @@
       "targetType":"msg",
       "statusVal":"",
       "statusType":"auto",
-      "x":490,
-      "y":860,
+      "x":530,
+      "y":900,
       "wires":[
          
       ]
    },
    {
-      "id":"123b1bdd.4ba514",
+      "id":"59dc332e73c7cb2f",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -723,9 +719,9 @@
       ]
    },
    {
-      "id":"89aa47c5.370818",
+      "id":"9b0c78a43706d4e5",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -745,26 +741,26 @@
       "y":80,
       "wires":[
          [
-            "8eded1f8.44643"
+            "354789c92b22b767"
          ]
       ]
    },
    {
-      "id":"7f2cabb0.391184",
+      "id":"66588b37ad7812eb",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"V3.0.2",
       "info":"# V3.0.2\n - Bugfix rename GarageState to SelectGarage\n# V3.0.1\n - Bug fix: Sensors typo in script\n - Add TampSens for Tampered binary sensor\n# V3.0.0\n - Reorgination of allot of code\n - Changed name of variables in Settings node\n - Added Device types:\n - Binary Sensor\n - Sensor (List of stings to show)\n - Tag\n - Select (List of Strings to select)\n\n# V2.3.0\n - Add settings to use part of Variable name      enable part match if name to be valid  \n  UnitsContainsName true is the new default\n - Add support for Select device types See example in Settings node and Device install\n\n\n# V2.2.3\n - Add possible to enable Set fanmode topic  \n   See  Settings for SetTime  \n - OEE/%sysname%/%taskname%/%valname%/FanModeSet   \n - converts to \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5  \n    Sent to EE/%sysname%/%taskname%/%valname%/_FanModeSet\n\n# V2.2.2\n - Change presure to hPa\n  you need to clear list and save list to update your already created devices \n - Added som comments in function node that the settings that is used is in Settings node\n - Documentation updated to show it.\n \n# V2.2.1\n - Added support for changing default unit text\n - Settings inject node updated with new info.\n - Default settings for new device so new units get \".\" as sufix/unit if not found in units list in settings inject node.\n \n\n# V2.2.0\n - Add Send notification if Device is setup wrong and don't Create a device. \n - example unsupported char is used in topic\n - (not A-Z,_,0-9)\n\n# V2.1.2\n - Better Debug output added\n - More correct name of Flow settings\n   you can select what to Input to allow\n   All, none or a Singel topic\n\n# V2.1.1\n - Small bugfix for bug that did that is skipped variable State  \n - Add as New device type for set time with Slider 0-240\n\n# V2.1    \n - Added Termostat \n - Fixed load list function\n        \n# V2.0 Rewrite of original node\n\nhttps://github.com/KnatteAnka/NodeRED_ESPEASY_AutoDiscovery",
       "x":50,
-      "y":20,
+      "y":40,
       "wires":[
          
       ]
    },
    {
-      "id":"91511d8a.85c15",
+      "id":"58abc295774a7d16",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Light example",
       "props":[
          {
@@ -786,15 +782,15 @@
       "y":540,
       "wires":[
          [
-            "61dc00b3.b4bf",
-            "76c77bfd.d0bce4"
+            "0849bf5836af6dca",
+            "e7ee6c4d2c4f62c9"
          ]
       ]
    },
    {
-      "id":"b9d56a96.ef3328",
+      "id":"8473e69ee968b652",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Clear Example Light",
       "props":[
          {
@@ -816,14 +812,14 @@
       "y":580,
       "wires":[
          [
-            "61dc00b3.b4bf"
+            "0849bf5836af6dca"
          ]
       ]
    },
    {
-      "id":"5d3cde1e.0ed88",
+      "id":"489a53071da8ce5e",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Settings",
       "props":[
          {
@@ -839,20 +835,20 @@
       "once":true,
       "onceDelay":0.1,
       "topic":"",
-      "payload":"{\"UnitsContainsName\":true,\"Units\":[{\"ValueName\":\"battery\",\"Unit\":\"%\",\"Device_Class\":\"battery\"},{\"ValueName\":\"humidity\",\"Unit\":\"%\",\"Device_Class\":\"humidity\"},{\"ValueName\":\"temperature\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"temp\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"power\",\"Unit\":\"W\",\"Device_Class\":\"power\"},{\"ValueName\":\"pressure\",\"Unit\":\"hPa\",\"Device_Class\":\"pressure\"},{\"ValueName\":\"current\",\"Unit\":\"A\",\"Device_Class\":\"current\"},{\"ValueName\":\"energy\",\"Unit\":\"KWh\",\"Device_Class\":\"energy\"},{\"ValueName\":\"voltage\",\"Unit\":\"V\",\"Device_Class\":\"voltage\"},{\"ValueName\":\"gm\",\"Unit\":\"GM\"},{\"ValueName\":\"elapsedtime\",\"Unit\":\"S\"}],\"Devices\":[{\"ValueName\":\"GarrageList\",\"Type\":\"sensor\",\"List\":[\"Open\",\"Closed\",\"Car found\"],\"unit_of_measurement\":\"\"},{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Button\",\"Type\":\"button\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100},{\"ValueName\":\"SetTemp\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":17,\"temp_step\":0.5},{\"ValueName\":\"CounterTime\",\"Type\":\"light\",\"Brightness\":240,\"RGB\":false},{\"ValueName\":\"SetTime\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":0,\"temp_step\":0.5,\"Mode_state_topic\":true},{\"ValueName\":\"SelectFan\",\"Type\":\"select\",\"options\":[\"Off\",\"Low\",\"Mid\",\"High\"]},{\"ValueName\":\"SelectLock\",\"Type\":\"select\",\"options\":[\"Unlock\",\"Locked\",\"Armed\"]},{\"ValueName\":\"SelectGarrage\",\"Type\":\"select\",\"options\":[\"Open\",\"Closed\",\"Car found\",\"Car not found\"]},{\"ValueName\":\"SelectColor\",\"Type\":\"select\",\"options\":[\"Black\",\"White\",\"Red\",\"Green\",\"Blue\",\"Yellow\",\"Orange\",\"Purple\"]},{\"ValueName\":\"LockSens\",\"Type\":\"binary_sensor\",\"device_class\":\"lock\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"MotionSens\",\"Type\":\"binary_sensor\",\"device_class\":\"motion\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"MoveSens\",\"Type\":\"binary_sensor\",\"device_class\":\"moving\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"TampSens\",\"Type\":\"binary_sensor\",\"device_class\":\"tamper\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"Tag\",\"Type\":\"tag\"}],\"UseDefaultUnit\":true,\"DefaultUnit\":\".\"}",
+      "payload":"{\"UnitsContainsName\":true,\"Units\":[{\"ValueName\":\"battery\",\"Unit\":\"%\",\"Device_Class\":\"battery\"},{\"ValueName\":\"humidity\",\"Unit\":\"%\",\"Device_Class\":\"humidity\"},{\"ValueName\":\"temperature\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"temp\",\"Unit\":\"°C\",\"Device_Class\":\"temperature\"},{\"ValueName\":\"power\",\"Unit\":\"W\",\"Device_Class\":\"power\"},{\"ValueName\":\"pressure\",\"Unit\":\"hPa\",\"Device_Class\":\"pressure\"},{\"ValueName\":\"current\",\"Unit\":\"A\",\"Device_Class\":\"current\"},{\"ValueName\":\"energy\",\"Unit\":\"KWh\",\"Device_Class\":\"energy\"},{\"ValueName\":\"voltage\",\"Unit\":\"V\",\"Device_Class\":\"voltage\"},{\"ValueName\":\"gm\",\"Unit\":\"GM\"},{\"ValueName\":\"elapsedtime\",\"Unit\":\"S\"},{\"ValueName\":\"distance\",\"Unit\":\"cm\"}],\"Devices\":[{\"ValueName\":\"LWT\",\"Type\":\"sensor\",\"RemoveUnit\":true},{\"ValueName\":\"T_Text\",\"Type\":\"sensor\",\"RemoveUnit\":true},{\"ValueName\":\"GarrageList\",\"Type\":\"sensor\",\"List\":[\"Open\",\"Closed\",\"Car found\"],\"RemoveUnit\":true},{\"ValueName\":\"State\",\"Type\":\"switch\"},{\"ValueName\":\"Relay\",\"Type\":\"switch\"},{\"ValueName\":\"Button\",\"Type\":\"button\"},{\"ValueName\":\"Brightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":false},{\"ValueName\":\"RGBBrightness\",\"Type\":\"light\",\"Brightness\":255,\"RGB\":true},{\"ValueName\":\"Percent\",\"Type\":\"light\",\"Brightness\":100},{\"ValueName\":\"SetTemp\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":17,\"temp_step\":0.5},{\"ValueName\":\"CounterTime\",\"Type\":\"light\",\"Brightness\":240,\"RGB\":false},{\"ValueName\":\"SetTime\",\"Type\":\"climate\",\"max_temp\":24,\"min_temp\":0,\"temp_step\":0.5,\"Mode_state_topic\":true},{\"ValueName\":\"SelectFan\",\"Type\":\"select\",\"options\":[\"Off\",\"Low\",\"Mid\",\"High\"]},{\"ValueName\":\"SelectLock\",\"Type\":\"select\",\"options\":[\"Unlock\",\"Locked\",\"Armed\"]},{\"ValueName\":\"SelectGarrage\",\"Type\":\"select\",\"options\":[\"Open\",\"Closed\",\"Car found\",\"Car not found\"]},{\"ValueName\":\"SelectColor\",\"Type\":\"select\",\"options\":[\"Black\",\"White\",\"Red\",\"Green\",\"Blue\",\"Yellow\",\"Orange\",\"Purple\"]},{\"ValueName\":\"LockSens\",\"Type\":\"binary_sensor\",\"device_class\":\"lock\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"MotionSens\",\"Type\":\"binary_sensor\",\"device_class\":\"motion\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"MoveSens\",\"Type\":\"binary_sensor\",\"device_class\":\"moving\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"TampSens\",\"Type\":\"binary_sensor\",\"device_class\":\"tamper\",\"payload_on\":\"1\",\"payload_off\":\"0\"},{\"ValueName\":\"Tag\",\"Type\":\"tag\"}],\"UseDefaultUnit\":true,\"DefaultUnit\":\".\"}",
       "payloadType":"json",
-      "x":840,
-      "y":340,
+      "x":440,
+      "y":400,
       "wires":[
          [
-            "eb2e62bc.72124"
+            "a9263bd149504e51"
          ]
       ]
    },
    {
-      "id":"eb2e62bc.72124",
+      "id":"a9263bd149504e51",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -868,8 +864,8 @@
       "from":"",
       "to":"",
       "reg":false,
-      "x":1020,
-      "y":340,
+      "x":640,
+      "y":380,
       "wires":[
          [
             
@@ -877,9 +873,9 @@
       ]
    },
    {
-      "id":"1ff20790.1b7ed8",
+      "id":"82a9f616c32f19ad",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "props":[
          {
@@ -901,14 +897,14 @@
       "y":180,
       "wires":[
          [
-            "ea36bbf4.a60468"
+            "8faaf93cdb0aa945"
          ]
       ]
    },
    {
-      "id":"ea36bbf4.a60468",
+      "id":"8faaf93cdb0aa945",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -933,9 +929,9 @@
       ]
    },
    {
-      "id":"e9b79ec3.be8f9",
+      "id":"26e37009563a7006",
       "type":"switch",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "property":"topic",
       "propertyType":"msg",
@@ -967,14 +963,15 @@
             
          ],
          [
-            "1b935601.6f77fa"
+            "0d0b9bd6bdc942bf",
+            "14b54472135e27e3"
          ]
       ]
    },
    {
-      "id":"f982ba54.1dc028",
+      "id":"aeea5b47b81ab9c5",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Termostat example",
       "props":[
          {
@@ -996,15 +993,15 @@
       "y":460,
       "wires":[
          [
-            "61dc00b3.b4bf",
-            "76c77bfd.d0bce4"
+            "0849bf5836af6dca",
+            "e7ee6c4d2c4f62c9"
          ]
       ]
    },
    {
-      "id":"c906085f.cdb168",
+      "id":"5e8495c2073a1178",
       "type":"mqtt in",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "topic":"OEE/#",
       "qos":"2",
@@ -1017,14 +1014,14 @@
       "y":960,
       "wires":[
          [
-            "6b853310.6e826c"
+            "86edec2c62c8ccb3"
          ]
       ]
    },
    {
-      "id":"3027cc12.6e1f24",
+      "id":"5150e7a4596fc89e",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":true,
       "tosidebar":true,
@@ -1040,9 +1037,9 @@
       ]
    },
    {
-      "id":"6b853310.6e826c",
+      "id":"86edec2c62c8ccb3",
       "type":"function",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"TransformData (2)",
       "func":"var Debug = flow.get(\"Debug\")\nvar InputString = msg.payload\nvar InputTopic = msg.topic\nvar lastSlash = msg.topic.lastIndexOf(\"/\")+1\nvar Command = msg.topic.substring(lastSlash)\nvar Base = msg.topic.substring(1,lastSlash)\nvar Topic = []\nvar Payload = []\nif(Debug==2)node.warn(\"InputString:\"+InputString+\"\\n Topic:\"+InputTopic+\"\\n Command:\"+Command+\"\\n Base:\"+Base)\nif (Command==\"RGB\"){\n    Values = InputString.split(\",\")\n    for (var AA in Values){\n        var Output={}\n        Output.topic = Base+\"_\"+Command[AA]\n        Output.payload = Values[AA]\n        node.send(Output)\n    }\n    \n}\nif (Command==\"FanMode\"){\n    var Output={}\n    var FanModeSettings = {\n        \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5\n    }\n    for (var AA in FanModeSettings){\n        if (AA==InputString){\n            Output.topic = Base+\"_\"+Command\n            Output.payload = FanModeSettings[AA]\n            break\n        }\n    }    \n \n if (Output.topic != undefined)node.send(Output)\n}\nif (Command==\"FanModeSet\"){\n    var Output={}\n    var FanModeSettings = {\n        \"off\":0,\n        \"auto\":1,\n        \"heat\":2,\n        \"cool\":3,\n        \"dry\":4,\n        \"fan_only\":5\n    }\n    \n    for (var AA in FanModeSettings){\n        //if(Debug==2)node.warn(\"FanModeSettings[AA]:\"+FanModeSettings[AA]+\"\\n InputString\"+InputString+ \"\\n AA\"+AA)\n        if (FanModeSettings[AA]==InputString){\n            Output.topic = Base+\"_\"+Command\n            Output.payload = AA\n            break\n        }\n    }    \n \n if (Output.topic != undefined)node.send(Output)\n}",
       "outputs":1,
@@ -1056,16 +1053,16 @@
       "y":960,
       "wires":[
          [
-            "61dc00b3.b4bf",
-            "cbfd5ad0.5c4b38",
-            "f2798673652facdc"
+            "0849bf5836af6dca",
+            "a921c1e22c24cf3f",
+            "f5a6dbaefe55f1fc"
          ]
       ]
    },
    {
-      "id":"cbfd5ad0.5c4b38",
+      "id":"a921c1e22c24cf3f",
       "type":"switch",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "property":"Debug",
       "propertyType":"flow",
@@ -1081,14 +1078,14 @@
       "y":1000,
       "wires":[
          [
-            "3027cc12.6e1f24"
+            "5150e7a4596fc89e"
          ]
       ]
    },
    {
-      "id":"841a8c4e.81a6",
+      "id":"20a62f31d4f4277c",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"The SingelTopic",
       "props":[
          {
@@ -1104,20 +1101,20 @@
       "once":true,
       "onceDelay":0.1,
       "topic":"",
-      "payload":"EE/DoorESP_8/DoorBell/State",
+      "payload":"EE/NR_Weather/",
       "payloadType":"str",
       "x":1300,
       "y":180,
       "wires":[
          [
-            "a44751e2.5b03c"
+            "88516ce8e1910499"
          ]
       ]
    },
    {
-      "id":"a44751e2.5b03c",
+      "id":"88516ce8e1910499",
       "type":"change",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "rules":[
          {
@@ -1142,9 +1139,9 @@
       ]
    },
    {
-      "id":"6a88dbee.ddb744",
+      "id":"787df86b6248e857",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Example Devices",
       "info":"",
       "x":1040,
@@ -1154,9 +1151,9 @@
       ]
    },
    {
-      "id":"37bea68d.70097a",
+      "id":"bf15f1a792c545e9",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Clear Example Termostat",
       "props":[
          {
@@ -1178,14 +1175,14 @@
       "y":500,
       "wires":[
          [
-            "61dc00b3.b4bf"
+            "0849bf5836af6dca"
          ]
       ]
    },
    {
-      "id":"32fd2078.63187",
+      "id":"59794eb5294d19da",
       "type":"json",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "property":"payload",
       "action":"",
@@ -1194,15 +1191,15 @@
       "y":40,
       "wires":[
          [
-            "d2cb1728.e26c68",
-            "123b1bdd.4ba514"
+            "bc1c9edf5fa5c641",
+            "59dc332e73c7cb2f"
          ]
       ]
    },
    {
-      "id":"8cfbb7f6.89f268",
+      "id":"905ed9b03097cf2a",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Notice",
       "active":true,
       "tosidebar":true,
@@ -1219,26 +1216,24 @@
       ]
    },
    {
-      "id":"c07971c4.46b07",
+      "id":"99275a7ca55ef87a",
       "type":"api-call-service",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "server":"a64069e3.122918",
-      "version":4,
+      "version":5,
       "debugenabled":false,
       "domain":"notify",
       "service":"persistent_notification",
-      "target":{
-         "entityId":[
-            
-         ],
-         "areaId":[
-            
-         ],
-         "deviceId":[
-            
-         ]
-      },
+      "areaId":[
+         
+      ],
+      "deviceId":[
+         
+      ],
+      "entityId":[
+         
+      ],
       "data":"",
       "dataType":"json",
       "mergeContext":"",
@@ -1256,9 +1251,9 @@
       ]
    },
    {
-      "id":"1ccf5897.d9e477",
+      "id":"99c14b6e6feebef4",
       "type":"delay",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "pauseType":"rate",
       "timeout":"30",
@@ -1276,26 +1271,26 @@
       "y":880,
       "wires":[
          [
-            "c07971c4.46b07"
+            "99275a7ca55ef87a"
          ]
       ]
    },
    {
-      "id":"fd84c3fa.c3423",
+      "id":"801c2a3295eddacc",
       "type":"comment",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Settings",
       "info":"Select node below to show settings",
-      "x":830,
-      "y":300,
+      "x":440,
+      "y":340,
       "wires":[
          
       ]
    },
    {
-      "id":"f2798673652facdc",
+      "id":"f5a6dbaefe55f1fc",
       "type":"debug",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"",
       "active":true,
       "tosidebar":true,
@@ -1311,9 +1306,9 @@
       ]
    },
    {
-      "id":"60a243c2acb987f1",
+      "id":"67eabe389cab170d",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Debug All Mainscript",
       "props":[
          {
@@ -1335,14 +1330,14 @@
       "y":240,
       "wires":[
          [
-            "e1fe0ffe.531ce"
+            "9fac68efc5f38d26"
          ]
       ]
    },
    {
-      "id":"263ddf5739777c43",
+      "id":"48db92d51a80aee1",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Debug all TransformData",
       "props":[
          {
@@ -1364,14 +1359,14 @@
       "y":320,
       "wires":[
          [
-            "e1fe0ffe.531ce"
+            "9fac68efc5f38d26"
          ]
       ]
    },
    {
-      "id":"67f36f789a938efa",
+      "id":"7ab95fad550c66e5",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Selects example",
       "props":[
          {
@@ -1393,16 +1388,16 @@
       "y":460,
       "wires":[
          [
-            "76c77bfd.d0bce4",
-            "61dc00b3.b4bf"
+            "e7ee6c4d2c4f62c9",
+            "0849bf5836af6dca"
          ]
       ],
       "info":"Topics:\nEE Out: \nValue name to match: \nEE In:\n\n\n\"command_topic\": \"OEE/Nodered_Select/Temp/SelectFan/Set\",\n\"state_topic\": \"EE/Nodered_Select/Temp/SelectFan\",\n\n\n"
    },
    {
-      "id":"32f2844e1d89039d",
+      "id":"ae651035c35895d8",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Clear Example Selects",
       "props":[
          {
@@ -1424,14 +1419,14 @@
       "y":500,
       "wires":[
          [
-            "61dc00b3.b4bf"
+            "0849bf5836af6dca"
          ]
       ]
    },
    {
-      "id":"a83d22d544810c56",
+      "id":"452294268ae1e0a6",
       "type":"inject",
-      "z":"c7a7e5ea.d0e448",
+      "z":"8d38f026199b1778",
       "name":"Debug Created Devices MainScript",
       "props":[
          {
@@ -1453,42 +1448,185 @@
       "y":280,
       "wires":[
          [
-            "e1fe0ffe.531ce"
+            "9fac68efc5f38d26"
          ]
+      ]
+   },
+   {
+      "id":"cf74f94c02f799b2",
+      "type":"inject",
+      "z":"8d38f026199b1778",
+      "g":"f1acc70ff23752d7",
+      "name":"Load List",
+      "props":[
+         {
+            "p":"payload"
+         },
+         {
+            "p":"topic",
+            "vt":"str"
+         }
+      ],
+      "repeat":"",
+      "crontab":"",
+      "once":false,
+      "onceDelay":0.1,
+      "topic":"",
+      "payload":"true",
+      "payloadType":"bool",
+      "x":120,
+      "y":1280,
+      "wires":[
+         [
+            "2e19893352fed439"
+         ]
+      ]
+   },
+   {
+      "id":"2e19893352fed439",
+      "type":"file in",
+      "z":"8d38f026199b1778",
+      "g":"f1acc70ff23752d7",
+      "name":"",
+      "filename":"/config/EasyESP_MQTTDisc.txt",
+      "format":"utf8",
+      "chunk":false,
+      "sendError":false,
+      "encoding":"none",
+      "allProps":false,
+      "x":350,
+      "y":1280,
+      "wires":[
+         [
+            "81bf2de62563808b"
+         ]
+      ]
+   },
+   {
+      "id":"81bf2de62563808b",
+      "type":"file",
+      "z":"8d38f026199b1778",
+      "g":"f1acc70ff23752d7",
+      "name":"",
+      "filename":"/config/ESPEasy_MQTTDisc.txt",
+      "appendNewline":true,
+      "createDir":true,
+      "overwriteFile":"true",
+      "encoding":"none",
+      "x":650,
+      "y":1280,
+      "wires":[
+         [
+            "177c5e9b22b05956"
+         ]
+      ]
+   },
+   {
+      "id":"177c5e9b22b05956",
+      "type":"file",
+      "z":"8d38f026199b1778",
+      "g":"f1acc70ff23752d7",
+      "name":"",
+      "filename":"/config/EasyESP_MQTTDisc.txt",
+      "appendNewline":true,
+      "createDir":true,
+      "overwriteFile":"delete",
+      "encoding":"none",
+      "x":950,
+      "y":1280,
+      "wires":[
+         [
+            
+         ]
+      ]
+   },
+   {
+      "id":"db7f1dafd8e83fe0",
+      "type":"comment",
+      "z":"8d38f026199b1778",
+      "g":"f1acc70ff23752d7",
+      "name":"copy old file to new file and remove old file",
+      "info":"",
+      "x":220,
+      "y":1240,
+      "wires":[
+         
+      ]
+   },
+   {
+      "id":"0d0b9bd6bdc942bf",
+      "type":"debug",
+      "z":"8d38f026199b1778",
+      "name":"debug 11",
+      "active":false,
+      "tosidebar":true,
+      "console":false,
+      "tostatus":false,
+      "complete":"false",
+      "statusVal":"",
+      "statusType":"auto",
+      "x":440,
+      "y":680,
+      "wires":[
+         
       ]
    },
    {
       "id":"18ac67d8.ba0268",
       "type":"mqtt-broker",
       "name":"MQTT",
-      "broker":"localhost",
+      "broker":"192.168.3.77",
       "port":"1883",
       "clientid":"",
+      "autoConnect":true,
       "usetls":false,
       "compatmode":false,
+      "protocolVersion":"4",
       "keepalive":"60",
       "cleansession":true,
+      "autoUnsubscribe":true,
       "birthTopic":"",
       "birthQos":"0",
       "birthPayload":"",
+      "birthMsg":{
+         
+      },
       "closeTopic":"",
       "closeQos":"0",
       "closePayload":"",
+      "closeMsg":{
+         
+      },
       "willTopic":"",
       "willQos":"0",
-      "willPayload":""
+      "willPayload":"",
+      "willMsg":{
+         
+      },
+      "userProps":"",
+      "sessionExpiry":""
    },
    {
       "id":"a64069e3.122918",
       "type":"server",
       "name":"Home Assistant",
-      "version":2,
+      "version":5,
       "addon":true,
       "rejectUnauthorizedCerts":true,
       "ha_boolean":"y|yes|true|on|home|open",
       "connectionDelay":true,
       "cacheJson":true,
       "heartbeat":false,
-      "heartbeatInterval":30
+      "heartbeatInterval":30,
+      "areaSelector":"friendlyName",
+      "deviceSelector":"friendlyName",
+      "entitySelector":"friendlyName",
+      "statusSeparator":"at: ",
+      "statusYear":"hidden",
+      "statusMonth":"short",
+      "statusDay":"numeric",
+      "statusHourCycle":"h23",
+      "statusTimeFormat":"h:m",
+      "enableGlobalContextStore":true
    }
 ]
